@@ -27,10 +27,11 @@ public class PuppyEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 //	@Column(name = "puppyId")
 //	private String puppyId;
 	
-	@Column(name = "puppyName", nullable = false)
+	@Column(name = "puppy_name", nullable = false)
 	private String puppyName;
 	
 	@Column(name = "gender", nullable = false)
@@ -39,7 +40,7 @@ public class PuppyEntity {
 	@Column(name = "neutering", nullable = false)
 	private boolean neutering;   // TINYINT? boolean?
 	
-	@Column(name = "puppyBirth", nullable = false)
+	@Column(name = "puppy_birth", nullable = false)
 	private Date puppyBirth;
 	
 	@Column(name = "breed", nullable = false)
@@ -54,7 +55,7 @@ public class PuppyEntity {
 	@Column(name = "introduction")
 	private String introduction;
 	
-	@Column(name = "profileImg")
+	@Column(name = "profile_img")
 	private String profileImg;
 	
 	// NoteEntity와 일대다 관계

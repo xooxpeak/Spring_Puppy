@@ -28,11 +28,12 @@ public class BoardEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-//	@Column(name = "boardId")
-//	private Long boardId;
 
-//	@Column(name = "userId")
-//	private Long userId;   
+	@Column(name = "boardId")
+	private Long boardId;
+
+	@Column(name = "userId")
+	private Long userId;   
 	
 	@Column(name = "title", nullable = false)
 	private String title;
@@ -40,18 +41,18 @@ public class BoardEntity {
 	@Column(name = "content", nullable = false)
 	private String content;
 	
-	@Column(name = "boardDate")
+	@Column(name = "board_date")
 	private Date boardDate;
 	
 	@Column(name = "views")
 	private int views;
 	
-	@Column(name = "userLike")
+	@Column(name = "user_like")
 	private int userLike;
 	
 	// UserEntity와 다대일 관계 & 조인
 	@ManyToOne
-	@JoinColumn(name = "userId", insertable = false, updatable = false)
+	@JoinColumn(name = "id", insertable = false, updatable = false)
 	private UserEntity user;
 	
 	// CommentEntity와 일대다 관계

@@ -23,28 +23,28 @@ public class GalleryEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-//	@Column(name = "galleryId", nullable = false)
-//	private Long galleryId;
 	
-// 지우는게 맞나 확인
-//	@Column(name = "noteId")
-//	private Long noteId;
+	@Column(name = "galleryId", nullable = false)
+	private Long galleryId;
 	
-	@Column(name = "gallDate", nullable = false)
+	@Column(name = "noteId")
+	private Long noteId;
+	
+	@Column(name = "gall_date", nullable = false)
 //	@Temporal(TemporalType.TIMESTAMP)   // 확인 필요
 	private Date gallDate;
 	
 	// 서버에 이미지를 저장하고 -> 저장한 경로를 데이터베이스에 저장.
 	// 실제로 이미지를 가져올 때 데이터베이스에 있는 이미지 경로를 찾아서 서버에서 찾아 이미지를 뿌려줌
-	@Column(name = "gallImg")   // 경로
+	@Column(name = "gall_img")   // 경로
 	private String gallImg;
 	
-	@Column(name = "gallExtension")   // 확장자
+	@Column(name = "gall_extension")   // 확장자
 	private String gallExtension;
 	
 	// NoteEntity와 다대일 관계
 	@ManyToOne
-	@JoinColumn(name = "note_id")
+	@JoinColumn(name = "id", insertable = false, updatable = false)
 	private NoteEntity note;
 
 }

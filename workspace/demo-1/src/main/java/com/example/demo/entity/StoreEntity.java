@@ -23,23 +23,21 @@ public class StoreEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-//	@Column(name = "storeId")
-//	private Long storeId;
 	
-	@Column(name = "storeName", nullable = false)
+	@Column(name = "store_name", nullable = false)
 	private String storeName;
 	
-	@Column(name = "storePhone")
+	@Column(name = "store_phone")
 	private String storePhone;
 	
-	@Column(name = "storeAddr1")
+	@Column(name = "store_addr1")
 	private String storeAddr1;
 	
-	@Column(name = "storeAddr2")
+	@Column(name = "store_addr2")
 	private String storeAddr2;
 	
-	@Column(name = "userId")
-	private Long userId;
+	@Column(name = "user_id")
+	private Long user_id;
 	
 	// PuppyEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)

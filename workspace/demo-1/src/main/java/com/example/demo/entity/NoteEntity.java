@@ -28,11 +28,11 @@ public class NoteEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 //	@Column(name = "noteId")
 //	private Long noteId;
 	
-	@Column(name = "noteDate", nullable = false)
-//	@Temporal(TemporalType.TIMESTAMP)  // 확인
+	@Column(name = "note_date", nullable = false)
 	private Date noteDate;   
 	
 	@Column(name = "meal", nullable = false)

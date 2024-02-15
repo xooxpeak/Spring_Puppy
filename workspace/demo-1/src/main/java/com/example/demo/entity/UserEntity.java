@@ -25,17 +25,21 @@ import lombok.Setter;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder  // 추가
+@Builder  
 public class UserEntity implements UserDetails {
 	
 	 @Id
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private Long id;
-	 @Column(name = "userId")
+	 
+	 @Column(name = "user_Id")
 	 private String userId;
 	 
 	 @Column(name = "password", nullable = false)
 	 private String password;
+	 
+	 @Column(name = "password2", nullable = false)
+	 private String password2;
 	 
 	 @Column(name = "name", nullable = false)
 	 private String name;
@@ -45,9 +49,6 @@ public class UserEntity implements UserDetails {
 	 
 	 @Column(name = "email", nullable = false)
 	 private String email;
-	 
-	 @Column(name = "phone", nullable = false)
-	 private String phone;
 	 
 	 @Column(name = "addr1", nullable = false)
 	 private String addr1;
@@ -61,19 +62,21 @@ public class UserEntity implements UserDetails {
 		 
 	 // CommentEntity 일대다 관계 추가 & 조인
 	 @OneToMany(cascade = CascadeType.ALL)   
-	 @JoinColumn(name = "userId")   // 외래키 지정
+	 @JoinColumn(name = "id")   // 외래키 지정
 	 private List<CommentEntity> commentEntityList;
 	 
 	 // BoardEntity 일대다 관계 추가 & 조인
 	 @OneToMany(cascade = CascadeType.ALL)
-	 @JoinColumn(name = "userId")
+	 @JoinColumn(name = "id")
 	 private List<BoardEntity> boardEntityList;
 	 
 	 // LikeListEntity 일대다 관계 추가 & 조인
 	 @OneToMany(cascade = CascadeType.ALL)
-	 @JoinColumn(name = "userId")
+	 @JoinColumn(name = "id")
 	 private List<LikeListEntity> likeListEntityList;
 
+	 
+	 
 	/**
 	* 해당 유저의 권한 목록
 	*/	 
