@@ -1,13 +1,20 @@
 package com.example.demo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/auth/n")
 public class RegisterController {
+	
+	@Autowired
+	UserService userService;
 
 	/**
 	기능 : 회원가입
@@ -40,11 +47,12 @@ public class RegisterController {
 	url : /dupIdCheck
 	request Data : 아이디
 	Response Data : 사용 가능한 아이디 or 중복된 아이디
+	 * @throws Exception 
 	 */
 	
 	@PostMapping("/dupIdCheck")
-	public Object dupIdCheck() {
-		return "2";
+	public Object dupIdCheck(@RequestParam(value = "userId") String userId) throws Exception {
+		return userService.idCheck(userId);
 	}
 	
 }
