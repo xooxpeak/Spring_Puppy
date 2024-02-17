@@ -1,0 +1,92 @@
+package com.example.demo.config;
+
+import java.util.Collections;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@Configuration
+@EnableWebSecurity    // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨.
+public class WebSecurityConfig {
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.setAllowCredentials(true);
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setMaxAge(3600L); //1시간
+                return config;
+            }
+        }));
+		
+		// csrf 토큰 없이 요청하면 해당 요청을 막기 때문에 잠깐 비활성화
+		 http.csrf(csrf -> csrf.disable())
+			// 인증절차 설정 시작 => 특정 URL에 대한 권한 설정.
+			.authorizeHttpRequests((requests) -> requests	
+					
+				// 모두 허용
+				// "/api/v1/auth/n/**" 라고 설정해줄 수도 있음. => 사용자 토큰 없이(n) 접근 허용.
+				.requestMatchers("/api/v1/auth/n/**").permitAll()	
+				
+				// 관리자=선생님(ROLE_ADMIN)만 접근 허용
+				// "/api/v1/auth/admin/**" 라고 설정해줄 수도 있음.
+				//.requestMatchers("/admin/**").hasRole("ADMIN") => ROLE_ 접두사가 자동으로 들어감.
+				.requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+				
+				// 로그인한 사용자(ROLE_USER)만 접근 허용
+				// "/api/v1/auth/y/**" 라고 설정해줄 수도 있음.
+				.requestMatchers("/api/v1/auth/y/**").hasAnyAuthority("ROLE_USER")
+				
+				// TODO: 최고 권한의 관리자 필요함. ( 필수는 아님. 추후 고려해보기. )
+				// 나머지 요청은 인증된 사용자에게만 접근 허용
+				.anyRequest().authenticated()    
+			)
+			
+			// (버전에 따라 변경된 부분) 기본 로그인 폼을 사용하지 않도록 설정
+			.formLogin((form) -> form.disable())   
+			// 로그아웃은 아래 코드 말고 따로 설정할거임.
+			.logout((logout) -> logout.permitAll());   // 로그아웃 허용
+
+		return http.build();
+	}
+
+	@Bean
+	public UserDetailsService userDetailsService() {
+		
+		UserDetails user =
+			 User.withDefaultPasswordEncoder()
+				.username("user")
+				.password("password")
+				.roles("USER")
+				.build();
+
+		return new InMemoryUserDetailsManager(user);
+		
+	}
+	
+	
+//	CorsConfigurationSource apiConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return (CorsConfigurationSource) source;
+//    }
+}
