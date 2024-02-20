@@ -16,5 +16,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {   // J
 	// existsBy : 해당 엔터티에 대해 특정 조건을 만족하는 레코드가 존재하는지 확인해주는 접두어
 	boolean existsByUserId(String userId);
 	
-	//UserEntity findByUserId(String);
+	// 회원가입
+	UserEntity save(UserEntity userEntity);
+	
+	UserEntity findByEmail(String userId);
 }

@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,28 +31,28 @@ public class UserEntity implements UserDetails {
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private Long id;
 	 
-	 @Column(name = "user_Id")
+	 @Column(name = "user_Id", nullable = false, length = 30, unique = true)
 	 private String userId;
 	 
-	 @Column(name = "password", nullable = false)
+	 @Column(name = "password", nullable = false, length = 50)
 	 private String password;
 	 
-	 @Column(name = "password2", nullable = false)
+	 @Column(name = "password2", nullable = false, length = 50)
 	 private String password2;
 	 
 	 @Column(name = "name", nullable = false)
 	 private String name;
 	 
-	 @Column(name = "birth", nullable = false)
-	 private Date birth;   
+	 //@Column(name = "birth", nullable = false)
+	 //private String birth;   
 	 
 	 @Column(name = "email", nullable = false)
 	 private String email;
 	 
-	 @Column(name = "addr1", nullable = false)
+	 @Column(name = "addr1", nullable = true)
 	 private String addr1;
 	 
-	 @Column(name = "addr2", nullable = false)
+	 @Column(name = "addr2", nullable = true)
 	 private String addr2;
 	 
 	 // PuppyEntity 일대다 관계 추가
