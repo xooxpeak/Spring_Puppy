@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.UserService;
 
@@ -24,11 +25,14 @@ public class RegisterController {
 	request Data : 아이디, 비밀번호, 비밀번호 확인, 이메일, 이름, 생년월일, 주소
 	Response Data : 이메일 인증, 회원가입 성공
 	 */
+	
 	@PostMapping("/register")
-	public Object register(@RequestBody UserEntity userEntity) {
-		// TODO: 유효성 검사 관련 내용이 추가
-		userService.register(userEntity);
-		return "회원가입이 완료되었습니다.";
+	public Object register(@RequestBody UserDTO userDTO) {
+		// TODO: 유효성 검사 관련 내용 추가
+		userService.register(userDTO);
+		System.out.println("userDTO:" + userDTO);
+		
+		return userDTO;
 	}
 	
 	

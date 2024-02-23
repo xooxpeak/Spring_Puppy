@@ -37,14 +37,11 @@ public class UserEntity implements UserDetails {
 	 @Column(name = "password", nullable = false, length = 50)
 	 private String password;
 	 
-	 @Column(name = "password2", nullable = false, length = 50)
-	 private String password2;
-	 
 	 @Column(name = "name", nullable = false)
 	 private String name;
 	 
-	 //@Column(name = "birth", nullable = false)
-	 //private String birth;   
+	 @Column(name = "birth", nullable = false)
+	 private String birth;   
 	 
 	 @Column(name = "email", nullable = false)
 	 private String email;
@@ -73,6 +70,7 @@ public class UserEntity implements UserDetails {
 	 @OneToMany(cascade = CascadeType.ALL)
 	 @JoinColumn(name = "id")
 	 private List<LikeListEntity> likeListEntityList;
+	 
 
 	 
 	 

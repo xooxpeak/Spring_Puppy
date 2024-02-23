@@ -3,10 +3,10 @@ package com.example.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
-
-import net.bytebuddy.implementation.bytecode.Throw;
 
 
 @Service
@@ -26,7 +26,10 @@ public class UserService {
 	}
 	
 	// 회원가입
-	public Object register(UserEntity userEntity) {
+	public Object register(UserDTO userDTO) {
+		// userDTO -> userEntity 로 변형하는 맵핑이 필요함.
+		// mapper mapstruct
+		UserEntity userEntity = UserMapper.instance.userEntityToUserDTO(userDTO);
 		return userRepository.save(userEntity);
 	}
 	

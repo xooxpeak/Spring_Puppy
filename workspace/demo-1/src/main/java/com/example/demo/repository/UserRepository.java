@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {   // J
 	boolean existsByUserId(String userId);
 	
 	// 회원가입
-	UserEntity save(UserEntity userEntity);
+	// UserEntity save(UserEntity userEntity);
 	
 	UserEntity findByEmail(String userId);
 }
