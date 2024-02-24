@@ -24,13 +24,13 @@ public class CommentEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "commentId")
-	private Long commentId;
+//	@Column(name = "commentId")
+//	private Long commentId;
 	
-	@Column(name = "boardId")
-	private Long boardId;
-	
-	@Column(name = "userId")  
+//	@Column(name = "board_id")
+//	private Long boardId;
+
+	@Column(name = "user_id")  
 	private Long userId;   
 	
 	@Column(name = "comment_date", nullable = false)

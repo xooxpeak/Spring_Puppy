@@ -29,10 +29,10 @@ public class BoardEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "boardId")
-	private Long boardId;
+//	@Column(name = "boardId")
+//	private Long boardId;
 
-	@Column(name = "userId")
+	@Column(name = "user_Id")
 	private Long userId;   
 	
 	@Column(name = "title", nullable = false)
@@ -54,6 +54,10 @@ public class BoardEntity {
 	@ManyToOne
 	@JoinColumn(name = "id", insertable = false, updatable = false)
 	private UserEntity user;
+	
+	// StoreEntity와 다대일 관계
+	@ManyToOne
+	private StoreEntity store;
 	
 	// CommentEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)

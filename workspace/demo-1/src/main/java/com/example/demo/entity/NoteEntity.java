@@ -54,5 +54,9 @@ public class NoteEntity {
 	// GalleryEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)   //CascadeType.All => 부모가 받는 속성을 자식도 그대로 물려받음
 	private List<GalleryEntity> galleryEntityList;
+	
+	// StoreEntity와 다대일 관계
+	@ManyToOne
+	private StoreEntity entity;
 
 }

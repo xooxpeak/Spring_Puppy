@@ -25,8 +25,8 @@ public class LikeListEntity {
 	@Column(name = "user_id")   
 	private Long userId;   
 	
-	@Column(name = "store_id")  // 확인 필요
-	private Long storeId;
+//	@Column(name = "board_id")  // 확인 필요
+//	private Long boardId;
 	
 	// BoardEntity와 다대일 관계
 	@ManyToOne  
@@ -37,9 +37,9 @@ public class LikeListEntity {
 	@JoinColumn(name = "id", insertable = false, updatable = false)
 	private UserEntity user;
 	
-	// StoreEntity와 다대일 관계 & 조인 => 확인 필요
-	@ManyToOne
-	@JoinColumn(name = "id", insertable = false, updatable = false)
-	private StoreEntity store;
+//	// StoreEntity와 다대일 관계 & 조인 
+//	@ManyToOne
+//	@JoinColumn(name = "id", insertable = false, updatable = false)
+//	private StoreEntity store;
 	
 }

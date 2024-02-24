@@ -43,5 +43,12 @@ public class StoreEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<PuppyEntity> puppyEntityList;
 	
+	// NoteEntity와 일대다 관계
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<NoteEntity> noteEntityList;
+	
+	// BoardEntity와 일대다 관계
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<BoardEntity> boardEntityList;
 
 }
