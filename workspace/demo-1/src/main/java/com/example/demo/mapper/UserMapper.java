@@ -8,7 +8,8 @@ import com.example.demo.entity.UserEntity;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+	
 	UserMapper instance = Mappers.getMapper(UserMapper.class);
 	
-	UserEntity userEntityToUserDTO(UserDTO userDTO);
+	UserEntity userDTOToUserEntity(UserDTO userDTO);
 }

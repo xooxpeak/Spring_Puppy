@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -19,6 +21,11 @@ import jakarta.servlet.http.HttpServletRequest;
 @Configuration
 @EnableWebSecurity    // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨.
 public class WebSecurityConfig {
+
+	@Bean
+	public PasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder();
+	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -66,27 +73,18 @@ public class WebSecurityConfig {
 		return http.build();
 	}
 
-	@Bean
-	public UserDetailsService userDetailsService() {
-		
-		UserDetails user =
-			 User.withDefaultPasswordEncoder()
-				.username("user")
-				.password("password")
-				.roles("USER")
-				.build();
-
-		return new InMemoryUserDetailsManager(user);
-		
-	}
-	
-	
-//	CorsConfigurationSource apiConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
-//        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return (CorsConfigurationSource) source;
-//    }
+//	@Bean
+//	public UserDetailsService userDetailsService() {
+//
+//		UserDetails user =
+//			 User.withDefaultPasswordEncoder()
+//				.username("user")
+//				.password("password")
+//				.roles()
+//				.build();
+//
+//		return new InMemoryUserDetailsManager(user);
+//
+//	}
+//
 }

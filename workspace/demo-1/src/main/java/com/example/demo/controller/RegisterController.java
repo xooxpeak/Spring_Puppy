@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ResDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,14 +26,10 @@ public class RegisterController {
 	request Data : 아이디, 비밀번호, 비밀번호 확인, 이메일, 이름, 생년월일, 주소
 	Response Data : 이메일 인증, 회원가입 성공
 	 */
-	
 	@PostMapping("/register")
-	public Object register(@RequestBody UserDTO userDTO) {
+	public ResDTO register(@RequestBody UserDTO userDTO) {
 		// TODO: 유효성 검사 관련 내용 추가
-		userService.register(userDTO);
-		System.out.println("userDTO:" + userDTO);
-		
-		return userDTO;
+		return userService.register(userDTO);
 	}
 	
 	
