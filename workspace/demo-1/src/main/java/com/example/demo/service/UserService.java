@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ResDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,18 @@ public class UserService {
 		// UserRepository를 사용하여 주어진 사용자 아이디의 중복 여부를 확인
 		return userRepository.existsByUserId(userId);
 	}
+
+	// 비밀번호 일치 여부 확인
+	/* private ResDTO checkPassword(String password, String passwordCheck) {
+		if (!password.equals(passwordCheck)) {
+			return ResDTO.builder()
+					.code("400")
+					.message("패스워드 불일치")
+					.data(false)
+					.build();
+		}
+        else return null;
+    } */
 	
 	// 회원가입
 	public ResDTO register(UserDTO userDTO) {
@@ -37,6 +50,15 @@ public class UserService {
 				return ResDTO.builder()
 						.code("401")
 						.message("비어있는 아이디")
+						.data(false)
+						.build();
+			}
+			
+			// 비밀번호 일치 여부
+			if(!userDTO.getPassword().equals(userDTO.getPassword2())) {
+				return ResDTO.builder()
+						.code("401")
+						.message("패스워드 불일치")
 						.data(false)
 						.build();
 			}
