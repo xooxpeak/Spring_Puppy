@@ -30,7 +30,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 	implementation group: 'com.mysql', name: 'mysql-connector-j'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     // Map Struct
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
