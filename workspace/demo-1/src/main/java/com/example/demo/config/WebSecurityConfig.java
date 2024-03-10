@@ -2,6 +2,10 @@ package com.example.demo.config;
 
 import java.util.Collections;
 
+import com.example.demo.jwt.JwtAuthenticationFilter;
+import com.example.demo.jwt.JwtExceptionFilter;
+import com.example.demo.jwt.JwtTokenProvider;
+import io.jsonwebtoken.JwtException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -21,6 +26,9 @@ import jakarta.servlet.http.HttpServletRequest;
 @Configuration
 @EnableWebSecurity    // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨.
 public class WebSecurityConfig {
+
+	// 확인 필요
+	private com.example.demo.jwt.JwtTokenProvider JwtTokenProvider;
 
 	@Bean
 	public PasswordEncoder passwordEncoder(){
@@ -70,6 +78,12 @@ public class WebSecurityConfig {
 			// 로그아웃은 아래 코드 말고 따로 설정할거임.
 			.logout((logout) -> logout.permitAll());   // 로그아웃 허용
 
+		// 필터 통해서 토큰 기반 로그인을 할거다.
+		// JwtTokenProvider JwtTokenProvider = null;
+		http.addFilterBefore(new JwtAuthenticationFilter(JwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
+
+
 		return http.build();
 	}
 
@@ -87,4 +101,5 @@ public class WebSecurityConfig {
 //
 //	}
 //
+
 }
