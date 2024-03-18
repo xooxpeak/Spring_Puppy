@@ -1,24 +1,15 @@
 package com.example.demo.entity;
 
-import java.util.Collection;
-import java.util.List;
-
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity(name = "user")
 @Getter @Setter
@@ -76,11 +67,16 @@ public class UserEntity implements UserDetails {
 	 
 	/**
 	* 해당 유저의 권한 목록
-	*/	 
+	*/
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Builder.Default
+	private List<String> roles = new ArrayList<>();
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.roles.stream()
+				.map(SimpleGrantedAuthority::new)
+				.collect(Collectors.toList());
+
 	}
 
 	/**
@@ -88,8 +84,7 @@ public class UserEntity implements UserDetails {
 	*/
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return password;
 	}
 
 	/**
@@ -97,8 +92,7 @@ public class UserEntity implements UserDetails {
 	*/
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return userId;
 	}
 
     /**
@@ -109,8 +103,7 @@ public class UserEntity implements UserDetails {
      */
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
     /**
@@ -121,8 +114,7 @@ public class UserEntity implements UserDetails {
      */
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
     /**
@@ -133,8 +125,7 @@ public class UserEntity implements UserDetails {
      */
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
     /**
@@ -145,8 +136,7 @@ public class UserEntity implements UserDetails {
      */
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	 
 }

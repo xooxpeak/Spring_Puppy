@@ -1,9 +1,8 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.example.demo.entity.UserEntity;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {   // JpaRepository<Entity 클래스, PK 타입>
@@ -20,4 +19,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {   // J
 	// UserEntity save(UserEntity userEntity);
 	
 	UserEntity findByEmail(String userId);
+
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class JwtTokenProvider {
     }
 
     // 유저 정보를 이용하여 AccessToken과 RefreshToken을 생성하는 메서드
-    public static JwtToken generateToken(Authentication authentication) {
+    public JwtToken generateToken(Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -77,13 +78,13 @@ public class JwtTokenProvider {
                 .grantType("Bearer") // 토큰 타입 설정
                 .accessToken(accessToken) // Access Token 설정
                 .refreshToken(refreshToken) // Refresh Token 설정
-                .build(); // TokenInfo 객체 생성
+                .build(); // JwtToken 객체 생성
     }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내 Authentication 객체를 생성하는 메서드
-    public Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(String accessToken) {
         // Jwt 토큰 복호화
-        Claims claims = parseClaims(token);
+        Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
@@ -99,23 +100,27 @@ public class JwtTokenProvider {
         UserDetails principal = new User((String) claims.get("aud"), "", authorities);
 
         // UsernamePasswordAuthenticationToken 객체 반환
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     // JWT 토큰의 유효성을 검증하는 메서드
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token); // 토큰 파싱하여 유효성 검증
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token); // 토큰 파싱하여 유효성 검증
             return true; // 유효한 토큰일 경우 true 반환
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new ApiException(ExceptionEnum.INVALID_TOKEN); // 토큰이 잘못된 경우 예외 처리
+          //  throw new ApiException(ExceptionEnum.INVALID_TOKEN); // 토큰이 잘못된 경우 예외 처리
         } catch (ExpiredJwtException e) {
-            throw new ApiException(ExceptionEnum.TIMEOUT_TOKEN); // 토큰이 만료된 경우 예외 처리
+          //  throw new ApiException(ExceptionEnum.TIMEOUT_TOKEN); // 토큰이 만료된 경우 예외 처리
         } catch (UnsupportedJwtException | IllegalArgumentException e) {
-            throw new ApiException(ExceptionEnum.INVALID_TOKEN); // 지원하지 않는 토큰이거나 잘못된 형식의 경우 예외 처리
+          //  throw new ApiException(ExceptionEnum.INVALID_TOKEN); // 지원하지 않는 토큰이거나 잘못된 형식의 경우 예외 처리
         } catch (Exception e){
-            throw new ApiException(ExceptionEnum.INVALID_TOKEN); // 그 외 예외 처리
+          //  throw new ApiException(ExceptionEnum.INVALID_TOKEN); // 그 외 예외 처리
         }
+        return false;
     }
 
     // Redis에 RefreshToken 정보를 저장하는 메서드
@@ -131,40 +136,44 @@ public class JwtTokenProvider {
 //    }
 
     // RefreshToken을 이용하여 AccessToken을 재발급하는 메서드
-    public JwtToken refreshToken(String refreshToken) {
-        try {
-            // Refresh Token 복호화
-            Authentication authentication = getAuthentication(refreshToken);
-            // Redis에 저장된 Refresh Token 정보 가져오기
-            RefreshTokenInfo redisRefreshTokenInfo = refreshTokenInfoRepository.findById(authentication.getName()).orElseThrow();
-
-            JwtToken refreshGetToken = null;
-            // Redis에 저장된 Refresh Token과 요청된 Refresh Token이 일치할 경우
-            if (refreshToken.equals(redisRefreshTokenInfo.getRefreshToken())) {
-                refreshGetToken = generateToken(authentication); // 토큰 재발급
-
-                saveToken(refreshGetToken, authentication); // Redis에 새로운 Refresh Token 정보 저장
-                return refreshGetToken; // 새로운 토큰 반환
-            } else {
-                log.warn("does not exist Token"); // Redis에 저장된 Refresh Token이 존재하지 않을 경우
-                throw new ApiException(ExceptionEnum.TOKEN_DOES_NOT_EXIST); // 해당 예외 처리
-            }
-        } catch (NullPointerException e) {
-            log.warn("does not exist Token"); // Refresh Token이 존재하지 않을 경우
-            throw new ApiException(ExceptionEnum.TOKEN_DOES_NOT_EXIST); // 해당 예외 처리
-        } catch (SignatureException e) {
-            log.warn("Invalid Token Info"); // 토큰 정보가 잘못된 경우
-            throw new ApiException(ExceptionEnum.INVALID_TOKEN_INFO); // 해당 예외 처리
-        } catch (NoSuchElementException e) {
-            log.warn("no such Token value"); // Redis에 해당 토큰이 존재하지 않을 경우
-            throw new ApiException(ExceptionEnum.TOKEN_DOES_NOT_EXIST); // 해당 예외 처리
-        }
-    }
+//    public JwtToken refreshToken(String refreshToken) {
+//        try {
+//            // Refresh Token 복호화
+//            Authentication authentication = getAuthentication(refreshToken);
+//            // Redis에 저장된 Refresh Token 정보 가져오기
+//            RefreshTokenInfo redisRefreshTokenInfo = refreshTokenInfoRepository.findById(authentication.getName()).orElseThrow();
+//
+//            JwtToken refreshGetToken = null;
+//            // Redis에 저장된 Refresh Token과 요청된 Refresh Token이 일치할 경우
+//            if (refreshToken.equals(redisRefreshTokenInfo.getRefreshToken())) {
+//                refreshGetToken = generateToken(authentication); // 토큰 재발급
+//
+//                saveToken(refreshGetToken, authentication); // Redis에 새로운 Refresh Token 정보 저장
+//                return refreshGetToken; // 새로운 토큰 반환
+//            } else {
+//                log.warn("does not exist Token"); // Redis에 저장된 Refresh Token이 존재하지 않을 경우
+//                throw new ApiException(ExceptionEnum.TOKEN_DOES_NOT_EXIST); // 해당 예외 처리
+//            }
+//        } catch (NullPointerException e) {
+//            log.warn("does not exist Token"); // Refresh Token이 존재하지 않을 경우
+//            throw new ApiException(ExceptionEnum.TOKEN_DOES_NOT_EXIST); // 해당 예외 처리
+//        } catch (SignatureException e) {
+//            log.warn("Invalid Token Info"); // 토큰 정보가 잘못된 경우
+//            throw new ApiException(ExceptionEnum.INVALID_TOKEN_INFO); // 해당 예외 처리
+//        } catch (NoSuchElementException e) {
+//            log.warn("no such Token value"); // Redis에 해당 토큰이 존재하지 않을 경우
+//            throw new ApiException(ExceptionEnum.TOKEN_DOES_NOT_EXIST); // 해당 예외 처리
+//        }
+//    }
 
     // JWT 토큰을 파싱하여 클레임 정보를 반환하는 메서드
     private Claims parseClaims(String accessToken) {
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody(); // 토큰 파싱하여 클레임 정보 반환
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody(); // 토큰 파싱하여 클레임 정보 반환
         } catch (ExpiredJwtException e) {
             return e.getClaims(); // 만료된 토큰의 경우 클레임 정보 반환
         }
