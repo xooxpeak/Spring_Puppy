@@ -1,24 +1,11 @@
 package com.example.demo.entity;
 
-import java.util.Collection;
-import java.util.List;
-
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Collection;
 
 @Entity(name = "user")
 @Getter @Setter
@@ -53,23 +40,23 @@ public class UserEntity implements UserDetails {
 	 private String addr2;
 	 
 	 // PuppyEntity 일대다 관계 추가
-	 @OneToMany(cascade = CascadeType.ALL)   
-	 private List<PuppyEntity> puppyEntityList;
-		 
-	 // CommentEntity 일대다 관계 추가 & 조인
-	 @OneToMany(cascade = CascadeType.ALL)   
-	 @JoinColumn(name = "id")   // 외래키 지정
-	 private List<CommentEntity> commentEntityList;
-	 
-	 // BoardEntity 일대다 관계 추가 & 조인
-	 @OneToMany(cascade = CascadeType.ALL)
-	 @JoinColumn(name = "id")
-	 private List<BoardEntity> boardEntityList;
-	 
-	 // LikeListEntity 일대다 관계 추가 & 조인
-	 @OneToMany(cascade = CascadeType.ALL)
-	 @JoinColumn(name = "id")
-	 private List<LikeListEntity> likeListEntityList;
+//	 @OneToMany(cascade = CascadeType.ALL)
+//	 private List<PuppyEntity> puppyEntityList;
+//
+//	 // CommentEntity 일대다 관계 추가 & 조인
+//	 @OneToMany(cascade = CascadeType.ALL)
+//	 @JoinColumn(name = "id")   // 외래키 지정
+//	 private List<CommentEntity> commentEntityList;
+//
+//	 // BoardEntity 일대다 관계 추가 & 조인
+//	 @OneToMany(cascade = CascadeType.ALL)
+//	 @JoinColumn(name = "id")
+//	 private List<BoardEntity> boardEntityList;
+//
+//	 // LikeListEntity 일대다 관계 추가 & 조인
+//	 @OneToMany(cascade = CascadeType.ALL)
+//	 @JoinColumn(name = "id")
+//	 private List<LikeListEntity> likeListEntityList;
 	 
 
 	 
