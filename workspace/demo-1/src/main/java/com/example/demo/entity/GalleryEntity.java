@@ -24,10 +24,10 @@ public class GalleryEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "galleryId", nullable = false)
-	private Long galleryId;
+//	@Column(name = "galleryId", nullable = false)
+//	private Long galleryId;
 	
-	@Column(name = "noteId")
+	@Column(name = "note_id")
 	private Long noteId;
 	
 	@Column(name = "gall_date", nullable = false)

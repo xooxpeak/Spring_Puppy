@@ -1,8 +1,8 @@
 package com.example.demo.Jwt;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.Builder;
 
 @Builder
 @Data
