@@ -13,14 +13,14 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-	
+
 	/**
-	기능 : 로그인
-	url : /login
-	request Data : 아이디, 비밀번호
-	Response Data : 로그인 성공
-	*/
-	 
+	 기능 : 로그인
+	 url : /login
+	 request Data : 아이디, 비밀번호
+	 Response Data : 로그인 성공
+	 */
+
 	@PostMapping("/login")
 	public JwtToken login(@RequestParam(value="userId") String userId, @RequestParam(value="password") String password) {
 		return userService.login(userId, password);
@@ -31,19 +31,19 @@ public class UserController {
 	public int test(){
 		return 1;
 	}
-	
+
 	/**
-	기능 : 로그아웃
-	url : /logout
-	request Data : 
-	Response Data : 로그아웃
+	 기능 : 로그아웃
+	 url : /logout
+	 request Data :
+	 Response Data : 로그아웃
 	 */
-	
+
 	@GetMapping("/logout")
 	public Object logout() {
 		return null;
 	}
-	
-	
+
+
 
 }
