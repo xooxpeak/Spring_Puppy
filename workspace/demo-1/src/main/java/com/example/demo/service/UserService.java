@@ -1,10 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.Jwt.JwtToken;
-import com.example.demo.Jwt.JwtTokenProvider;
 import com.example.demo.dto.ResDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.entity.UserRole;
+import com.example.demo.jwt.JwtToken;
+import com.example.demo.jwt.JwtTokenProvider;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -87,6 +91,14 @@ public class UserService {
 
 		// 비밀번호 암호화
 		userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		
+		// 사용자에게 UserRole 객체를 생성하고 이를 UserEntity의 역할 목록에 추가한 후 저장
+		List<UserRole> roleList = new ArrayList<>();   // UserRole 객체들을 저장할 ArrayList 생성
+		UserRole userRole = new UserRole();   // 새로운 UserRole 객체 생성
+		userRole.setRoleId(1L);   // 새로 생성한 UserRole 객체의 role_id를 설정
+		roleList.add(userRole);   // 생성한 UserRole 객체를 roleList에 추가
+		userEntity.setRoleList(roleList);   // UserEntity에 roleList를 설정
+		userRepository.save(userEntity);   // 변경된 UserEntity를 UserRepository를 통해 저장
 
 		// 3. 회원가입 성공
 		return ResDTO.builder()

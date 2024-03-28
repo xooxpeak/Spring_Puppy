@@ -62,6 +62,11 @@ public class UserEntity implements UserDetails {
 	@JoinColumn(name = "id")
 	private List<LikeListEntity> likeListEntityList;
 
+	// UserRole 일대다 관계
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
+	private List<UserRole> roleList;
+
 	// user에 해당하는 권한이 알아서 조회돼서, roles에 담긴다.
 //	@ManyToMany
 //	@JoinTable(
