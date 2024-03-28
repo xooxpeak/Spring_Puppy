@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.Jwt.JwtTokenProvider;
+import com.example.demo.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
