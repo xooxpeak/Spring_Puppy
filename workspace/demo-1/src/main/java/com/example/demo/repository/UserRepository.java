@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.UserEntity;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {   // JpaRepository<Entity 클래스, PK 타입>
 	// 사용자의 이름이랑 이메일만 가져오기
@@ -19,5 +21,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {   // J
 	// 회원가입
 	// UserEntity save(UserEntity userEntity);
 	
-	UserEntity findByUserId(String userId);
+	Optional<UserEntity> findByUserId(String userId);
 }

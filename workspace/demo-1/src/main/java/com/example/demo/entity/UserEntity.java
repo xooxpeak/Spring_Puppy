@@ -79,7 +79,7 @@ public class UserEntity implements UserDetails {
 	// 사용자의 권한을 문자열 리스트로 저장
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
-	private List<String> roles = new ArrayList<>();
+	private List<String> role = new ArrayList<>();
 
 	/**
 	 * 해당 유저의 권한 목록
@@ -95,7 +95,7 @@ public class UserEntity implements UserDetails {
 		// roles 리스트를 스트림으로 변환하고
 		// 각 역할을 SimpleGrantedAuthority로 변환한 후
 		// 그 결과를 리스트로 수집하여 반환
-		return roles.stream()
+		return role.stream()
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
 	}

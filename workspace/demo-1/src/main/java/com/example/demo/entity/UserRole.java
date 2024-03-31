@@ -27,6 +27,6 @@ public class UserRole {
 
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private UserEntity userEntity;
+    private UserEntity user;
 }
 
