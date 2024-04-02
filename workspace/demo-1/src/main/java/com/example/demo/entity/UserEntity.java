@@ -45,27 +45,28 @@ public class UserEntity implements UserDetails {
 
 	// PuppyEntity 일대다 관계 추가
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "puppy_id")
 	private List<PuppyEntity> puppyEntityList;
 
 	// CommentEntity 일대다 관계 추가 & 조인
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id")   // 외래키 지정
+	@JoinColumn(name = "comment_id")   // 외래키 지정
 	private List<CommentEntity> commentEntityList;
 
 	// BoardEntity 일대다 관계 추가 & 조인
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "board_id")
 	private List<BoardEntity> boardEntityList;
 
 	// LikeListEntity 일대다 관계 추가 & 조인
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "likeList_id")
 	private List<LikeListEntity> likeListEntityList;
 
 	// UserRole 일대다 관계
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
-	private List<UserRole> roleList;
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "user_role_id")
+//	private List<UserRole> roleList;
 
 	// user에 해당하는 권한이 알아서 조회돼서, roles에 담긴다.
 //	@ManyToMany

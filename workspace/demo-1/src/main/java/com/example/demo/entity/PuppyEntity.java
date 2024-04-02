@@ -1,21 +1,10 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.sql.Date;
 import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity(name = "puppy")
 @Getter @Setter
@@ -59,15 +48,18 @@ public class PuppyEntity {
 	private String profileImg;
 	
 	// NoteEntity와 일대다 관계
-	@OneToMany(cascade = CascadeType.ALL)  
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "note_id")
 	private List<NoteEntity> noteEntityList;
 	
 	// StoreEntity와 다대일 관계
-	@ManyToOne   
+	@ManyToOne
+	@JoinColumn(name = "store_id", insertable = false, updatable = false)
 	private StoreEntity store;
 		
 	// UserEntity와 다대일 관계
-	@ManyToOne  
+	@ManyToOne
+	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private UserEntity user;
 
 }

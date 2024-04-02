@@ -29,12 +29,13 @@ public class LikeListEntity {
 //	private Long boardId;
 	
 	// BoardEntity와 다대일 관계
-	@ManyToOne  
+	@ManyToOne
+	@JoinColumn(name = "board_id", insertable = false, updatable = false)
 	private BoardEntity board;
 	
 	// UserEntity와 다대일 관계 & 조인
 	@ManyToOne
-	@JoinColumn(name = "id", insertable = false, updatable = false)
+	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private UserEntity user;
 	
 //	// StoreEntity와 다대일 관계 & 조인 

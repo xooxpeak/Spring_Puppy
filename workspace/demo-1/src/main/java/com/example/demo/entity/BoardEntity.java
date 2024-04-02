@@ -1,22 +1,10 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.sql.Date;
 import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity(name = "board")
 @Getter@Setter
@@ -52,19 +40,22 @@ public class BoardEntity {
 	
 	// UserEntity와 다대일 관계 & 조인
 	@ManyToOne
-	@JoinColumn(name = "id", insertable = false, updatable = false)
+	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private UserEntity user;
 	
 	// StoreEntity와 다대일 관계
 	@ManyToOne
+	@JoinColumn(name = "store_id", insertable = false, updatable = false)
 	private StoreEntity store;
 	
 	// CommentEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "comment_id")
 	private List<CommentEntity> commentEntityList;
 
 	// LikeListEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "likeList_id")
 	private List<LikeListEntity> likeListEntityList;
 	
 }

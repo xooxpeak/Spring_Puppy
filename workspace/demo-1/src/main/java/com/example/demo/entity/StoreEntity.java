@@ -1,18 +1,12 @@
 package com.example.demo.entity;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity(name = "store")
 @Getter @Setter
@@ -41,14 +35,17 @@ public class StoreEntity {
 	
 	// PuppyEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "puppy_id")
 	private List<PuppyEntity> puppyEntityList;
 	
 	// NoteEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "note_id")
 	private List<NoteEntity> noteEntityList;
 	
 	// BoardEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "board_id")
 	private List<BoardEntity> boardEntityList;
 
 }

@@ -1,18 +1,12 @@
 package com.example.demo.entity;
 
-import java.sql.Date;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Date;
 
 @Entity(name = "comment")
 @Getter @Setter
@@ -43,12 +37,12 @@ public class CommentEntity {
 	
 	// UserEntity와 다대일 관계 & 조인
 	@ManyToOne
-	@JoinColumn(name = "id", insertable = false, updatable = false)  // 작성하고 추가 할 수 없다.
+	@JoinColumn(name = "user_id", insertable = false, updatable = false)  // 작성하고 추가 할 수 없다.
 	private UserEntity user;
 	
 	// BoardEntity와 다대일 관계
 	@ManyToOne
-	@JoinColumn(name = "id", insertable = false, updatable = false)  // 추가함
+	@JoinColumn(name = "board_id", insertable = false, updatable = false)  // 추가함
 	private BoardEntity board;
 
 }
