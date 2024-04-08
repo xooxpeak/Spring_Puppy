@@ -3,12 +3,13 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "user_role")
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "user_role") // 테이블명 명시
 public class UserRole {
 
     @Id
@@ -23,10 +24,6 @@ public class UserRole {
 
     @ManyToOne
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
-    private Role role;
+    private Role roles;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private UserEntity user;
 }
-

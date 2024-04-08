@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginDTO;
 import com.example.demo.jwt.JwtToken;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +15,9 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	/**
 	 기능 : 로그인
 	 url : /login
@@ -23,15 +26,15 @@ public class UserController {
 	 */
 
 	@PostMapping("/login")
-//	public JwtToken login(@RequestParam(value="userId") String userId, @RequestParam(value="password") String password) {
-//		return userService.login(userId, password);
-//	}
-	public JwtToken login(@RequestBody LoginDTO loginDTO) {
-		String userId = loginDTO.getUserId();
-		String password = loginDTO.getPassword();
-		JwtToken tokenInfo = userService.login(userId, password);
-		return tokenInfo;
+	public JwtToken login(@RequestParam(value="userId") String userId, @RequestParam(value="password") String password) {
+		return userService.login(userId, password);
 	}
+//	public JwtToken login(@RequestBody LoginDTO loginDTO) {
+//		String userId = loginDTO.getUserId();
+//		String password = loginDTO.getPassword();
+//		JwtToken tokenInfo = userService.login(userId, password);
+//		return tokenInfo;
+//	}
 
 
 	@PostMapping("/test")

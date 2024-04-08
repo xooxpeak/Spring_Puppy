@@ -1,11 +1,8 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.example.demo.entity.UserEntity;
-
-import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {   // JpaRepository<Entity 클래스, PK 타입>
@@ -20,6 +17,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {   // J
 	
 	// 회원가입
 	// UserEntity save(UserEntity userEntity);
-	
-	Optional<UserEntity> findByUserId(String userId);
+
+//	@Query("SELECT ur.userId, ur.roleId FROM UserRole ur WHERE ur.userId = :userId")
+//	Optional<List<Object[]>> findUserRolesByUserId(@Param("userId") String userId);
+
+//	Optional<List<Object[]>> findByUserId(String userId);
+
+//	Optional<UserEntity> findByUserId(String userId);
+
+	UserEntity findByUserId(String userId);
+
 }

@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity(name = "user")
 @Getter @Setter
@@ -64,41 +63,26 @@ public class UserEntity implements UserDetails {
 	private List<LikeListEntity> likeListEntityList;
 
 	// UserRole 일대다 관계
-//	@OneToMany(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "user_role_id")
-//	private List<UserRole> roleList;
-
-	// user에 해당하는 권한이 알아서 조회돼서, roles에 담긴다.
-//	@ManyToMany
-//	@JoinTable(
-//			name = "user_role",
-//			joinColumns = @JoinColumn(name = "user_id"),
-//			inverseJoinColumns = @JoinColumn(name = "role_id")
-//	)
-//	private List<Role> roles = new ArrayList<>();
-
-	// 사용자의 권한을 문자열 리스트로 저장
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Builder.Default
-	private List<String> role = new ArrayList<>();
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+	private List<UserRole> roleList;
 
 	/**
 	 * 해당 유저의 권한 목록
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-//		ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-//		for(int i = 0; i < roles.size(); i++) {
-//			authorities.add(new SimpleGrantedAuthority(roles.get(i).getRoleName()));
-//		}
-//		return authorities;
+		ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+		for(int i = 0; i < roleList.size(); i++) {
+			authorities.add(new SimpleGrantedAuthority(roleList.get(i).getRoles().getRoleName()));
+		}
+		return authorities;
 
 		// roles 리스트를 스트림으로 변환하고
 		// 각 역할을 SimpleGrantedAuthority로 변환한 후
 		// 그 결과를 리스트로 수집하여 반환
-		return role.stream()
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
+//		return roles.stream()
+//				.map(SimpleGrantedAuthority::new)
+//				.collect(Collectors.toList());
 	}
 
 	/**

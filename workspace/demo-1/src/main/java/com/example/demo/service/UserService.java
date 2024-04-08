@@ -110,18 +110,6 @@ public class UserService {
 	}
 
 	// 로그인
-//	public JwtToken login(String username, String password){
-//		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-//				new UsernamePasswordAuthenticationToken(username, password);
-//
-//		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
-//
-//		JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
-//
-//		return jwtToken;
-//
-//	}
-
 	public JwtToken login(String userId, String password) {
 		try{
 			// 1. Login ID/PW 를 기반으로 Authentication 객체 생성
