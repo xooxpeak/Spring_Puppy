@@ -17,9 +17,6 @@ public class BoardEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-//	@Column(name = "boardId")
-//	private Long boardId;
-
 	@Column(name = "user_Id")
 	private Long userId;   
 	
@@ -49,11 +46,13 @@ public class BoardEntity {
 	private StoreEntity store;
 	
 	// CommentEntity와 일대다 관계
+//	@OneToMany(name = "comment_id", cascade = CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "comment_id")
 	private List<CommentEntity> commentEntityList;
 
 	// LikeListEntity와 일대다 관계
+//	@OneToMany(name = "likeList_id", cascade = CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "likeList_id")
 	private List<LikeListEntity> likeListEntityList;
