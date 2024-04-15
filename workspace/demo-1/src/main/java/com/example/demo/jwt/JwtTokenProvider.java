@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,7 +33,13 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        // 현재 시간을 milliseconds 단위로 가져오기
         long now = (new Date()).getTime();
+
+        // Header 부분 설정
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("alg", "HS256");
+        headers.put("typ", "JWT");
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + 86400000);
