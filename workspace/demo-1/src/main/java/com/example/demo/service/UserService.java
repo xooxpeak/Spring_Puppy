@@ -8,6 +8,8 @@ import com.example.demo.jwt.JwtToken;
 import com.example.demo.jwt.JwtTokenProvider;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,6 +34,9 @@ public class UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private HttpServletResponse response;
 
 	// 아이디 중복 검사 버튼
 	public Object idCheck(String userId) throws Exception {
@@ -117,11 +122,29 @@ public class UserService {
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
 
 			// 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-			// authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+			// authenticate 매서드가 실행될 때 UserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
 			Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
 			// 3. 인증 정보를 기반으로 JWT 토큰 생성
+			// 이 토큰에는 사용자의 정보와 권한 등이 포함됨
 			JwtToken tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+			// "refreshToken"이라는 이름의 쿠키를 생성
+			Cookie cookie = new Cookie("refreshToken", tokenInfo.getRefreshToken());
+
+			// 쿠키 만료 시간 설정 expires in 7 days
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+
+			// optional properties
+			cookie.setSecure(true);    // Secure 속성 설정: 쿠키가 HTTPS 연결에서만 전송되도록 설정
+			cookie.setHttpOnly(true);   // HttpOnly 속성 설정: JavaScript로 쿠키에 접근할 수 없도록 설정 (XSS 공격에 대응)
+			cookie.setPath("/");   // 쿠키의 경로 설정
+
+			// add cookie to response 생성한 쿠키를 응답에 추가하여 클라이언트로 전송
+			response.addCookie(cookie);
+
+			//   토큰 정보 초기화
+			tokenInfo.setRefreshToken(null);
 
 			return tokenInfo; }
 		catch (Exception e) {
@@ -129,6 +152,5 @@ public class UserService {
 		}
 		return null;
 	}
-
 
 }
