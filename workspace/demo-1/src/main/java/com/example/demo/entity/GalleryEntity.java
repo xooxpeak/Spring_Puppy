@@ -17,10 +17,7 @@ public class GalleryEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-//	@Column(name = "galleryId", nullable = false)
-//	private Long galleryId;
-	
+
 	@Column(name = "note_id")
 	private Long noteId;
 	
