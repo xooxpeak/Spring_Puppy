@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.UploadResDTO;
 import com.example.demo.service.GalleryService;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@Log4j2
 @RequestMapping("/api/v1/auth/y")
 public class GalleryController {
 

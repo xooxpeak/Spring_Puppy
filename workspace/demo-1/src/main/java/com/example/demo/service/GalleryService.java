@@ -28,7 +28,7 @@ public class GalleryService {
 	private GalleryRepository galleryRepository;
 
 	// 업로드 할 위치
-	@Value("${part4.upload.path}")
+	@Value("${part.upload.path}")
 	private String uploadPath;
 
 	public List<UploadResDTO> createGallery(MultipartFile[] uploadFiles) {
