@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.UploadResDTO;
+import com.example.demo.dto.GalleryDTO;
 import com.example.demo.repository.GalleryRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,15 @@ public class GalleryService {
 	@Value("${part.upload.path}")
 	private String uploadPath;
 
-	public List<UploadResDTO> createGallery(MultipartFile[] uploadFiles) {
-		List<UploadResDTO> uploadResDTOList = new ArrayList<>();
+	public List<GalleryDTO> createGallery(MultipartFile[] uploadFiles) {
+		List<GalleryDTO> galleryDTOList = new ArrayList<>();
 
 		// 업로드 할 위치
 //		String uploadPath = "C:/Users/xooxpeak/Desktop/과외/Upload";
 
 		for (MultipartFile uploadFile : uploadFiles) {
 			// 이미지 파일만 업로드
+			// TODO: 확장자를 빼오는 방법으로 수정
 			if (!Objects.requireNonNull(uploadFile.getContentType()).startsWith("image")) {
 				log.warn("this file is not an image type");
 				continue;
@@ -47,8 +48,10 @@ public class GalleryService {
 			// 파일명: 모든 경로를 포함한 파일 이름
 			String originalName = uploadFile.getOriginalFilename();
 			// 원본 파일 이름이 null이 아닌지 확인
+			// TODO: assert 확인하기
 			assert originalName != null;
 			// 마지막으로 온 "/"부분으로부터 +1 해준 부분부터 출력
+			// TODO: // 확인하기
 			String fileName = originalName.substring(originalName.lastIndexOf("//") + 1);
 			log.info("fileName: " + fileName);
 
@@ -65,12 +68,12 @@ public class GalleryService {
 			try {
 				// transferTo(file) : uploadFile에 파일을 업로드 하는 메서드
 				uploadFile.transferTo(savePath);
-				uploadResDTOList.add(new UploadResDTO(fileName, uuid, folderPath));
+				galleryDTOList.add(new GalleryDTO(fileName, uuid, folderPath));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
         }
-		return uploadResDTOList;
+		return galleryDTOList;
 	}
 
 	// 날짜 폴더 생성

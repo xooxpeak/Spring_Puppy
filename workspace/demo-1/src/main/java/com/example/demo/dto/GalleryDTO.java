@@ -7,6 +7,7 @@ import java.sql.Date;
 
 @Getter
 @Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -26,5 +27,11 @@ public class GalleryDTO {
 	@JsonProperty("gall_extension")
 	private String gallExtension;
 
-	
+	// 파일 업로드
+	private String fileName;
+	private String uuid;
+	private String folderPath;
+
+	public GalleryDTO(String fileName, String uuid, String folderPath) {
+	}
 }

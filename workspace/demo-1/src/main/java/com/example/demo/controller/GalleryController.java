@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UploadResDTO;
+import com.example.demo.dto.GalleryDTO;
 import com.example.demo.service.GalleryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class GalleryController {
 	 * response data : 사진첩 작성 성공
 	 */
 	@PostMapping("/createGallery")
-	public List<UploadResDTO> createGallery(@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
+	public List<GalleryDTO> createGallery(@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
 		return galleryService.createGallery(uploadFiles);
 	}
 //	public ResponseEntity<List<UploadResDTO>> createGallery(MultipartFile[] uploadFiles) {
