@@ -143,8 +143,8 @@ public class UserService {
 			// add cookie to response 생성한 쿠키를 응답에 추가하여 클라이언트로 전송
 			response.addCookie(cookie);
 
-			//   토큰 정보 초기화
-			tokenInfo.setRefreshToken(null);
+			//  토큰 정보 초기화
+			//tokenInfo.setRefreshToken(null);
 
 			return tokenInfo; }
 		catch (Exception e) {
