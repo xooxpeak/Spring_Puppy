@@ -1,11 +1,10 @@
 package com.example.demo.jwt;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Builder;
+import lombok.*;
 
 @Builder
 @Data
+@Getter @Setter
 @AllArgsConstructor
 public class JwtToken {
     private String grantType;

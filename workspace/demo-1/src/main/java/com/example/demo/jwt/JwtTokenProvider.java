@@ -45,8 +45,9 @@ public class JwtTokenProvider {
         headers.put("typ", "JWT");
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 86400000);
+        Date accessTokenExpiresIn = new Date(now + 1800000);
         String accessToken = Jwts.builder()
+                .setHeader(headers)
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
                 .setExpiration(accessTokenExpiresIn)
@@ -55,6 +56,9 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
+                .setHeader(headers)
+                .setSubject(authentication.getName())
+                .claim("auth", authorities)
                 .setExpiration(new Date(now + 86400000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -105,6 +109,41 @@ public class JwtTokenProvider {
         }
         return false;
     }
+
+    // accessToken이 만료된 경우
+//    public JwtToken refreshToken(HttpServletRequest request) {
+//        // 쿠키에서 리프레시 토큰을 가져옴
+//            String refreshToken = getRefreshTokenFromCookie(request);
+//    try {
+//        // 리프레시 토큰을 사용하여 새로운 액세스 토큰 발급
+//        JwtToken newAccessToken = generateNewAccessToken(refreshToken);
+
+//        // 발급된 새로운 액세스 토큰을 클라이언트에게 반환
+//        return newAccessToken;
+//    } catch (Exception e) {
+//        log.error("Failed to refresh access token", e);
+//        throw new ApiException(ExceptionEnum.TOKEN_REFRESH_FAILED);
+//    }
+//}
+
+    // 리프레시 토큰을 사용하여 새로운 액세스 토큰을 발급하는 메서드
+//    private JwtToken generateNewAccessToken(String refreshToken) {
+//        try {
+//            // 리프레시 토큰을 사용하여 사용자 정보를 가져옴
+//            Authentication authentication = getAuthentication(refreshToken);
+
+//            // 새로운 액세스 토큰 생성
+//            JwtToken newAccessToken = generateToken(authentication);
+
+//            // 발급된 액세스 토큰을 클라이언트에게 반환
+//            return newAccessToken;
+//        } catch (Exception e) {
+//            log.error("Failed to generate new access token", e);
+//            throw new ApiException(ExceptionEnum.TOKEN_GENERATION_FAILED);
+//        }
+//    }
+
+
 
 
     // accessToken
