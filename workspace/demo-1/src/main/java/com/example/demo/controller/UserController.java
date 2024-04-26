@@ -4,11 +4,14 @@ import com.example.demo.dto.LoginDTO;
 import com.example.demo.jwt.JwtToken;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 //@Controller   // 웹페이지와 통신
 //@ResponseBody   // data만 전달
+
+@Slf4j
 @RestController  // 두 개의 역할을 처리해줌
 @RequestMapping("/api/v1/auth/n")
 public class UserController {

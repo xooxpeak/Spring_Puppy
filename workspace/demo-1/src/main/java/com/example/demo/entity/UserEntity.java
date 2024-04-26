@@ -63,7 +63,8 @@ public class UserEntity implements UserDetails {
 	private List<LikeListEntity> likeListEntityList;
 
 	// UserRole 일대다 관계
-	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
 	private List<UserRole> roleList;
 
 	/**
