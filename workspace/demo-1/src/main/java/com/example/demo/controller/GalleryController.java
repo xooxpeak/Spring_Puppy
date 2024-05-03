@@ -24,7 +24,6 @@ public class GalleryController {
 	@PostMapping("/createGallery")
 	public List<GalleryDTO> createGallery(@RequestPart (value = "file", required = false) List<MultipartFile> uploadFiles) {
 		return galleryService.createGallery(uploadFiles);
-	//	return null;
 	}
 
 
@@ -63,8 +62,8 @@ public class GalleryController {
 	 */
 	
 	@GetMapping("/gallery")
-	public Object gallery() {
-		return null;
+	public List<GalleryDTO> gallery() {
+		return galleryService.galleryList();
 	}
 	
 	
