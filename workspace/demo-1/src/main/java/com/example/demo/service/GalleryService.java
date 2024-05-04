@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import com.example.demo.mapper.GalleryMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -34,6 +36,7 @@ public class GalleryService {
 	@Value("${part.upload.path}")
 	private String uploadPath;
 
+	// 사진첩 작성
 	public List<GalleryDTO> createGallery(List<MultipartFile> uploadFiles) {
         List<GalleryDTO> galleryDTOList = new ArrayList<>();
 
@@ -132,21 +135,31 @@ public class GalleryService {
 	}
 
 
-	// Mapstruct 사용해서 수정해보기
+	// 사진첩 목록 보기
+
+// Mapstruct 사용 x
+//	public List<GalleryDTO> galleryList() {
+//		List<GalleryEntity> galleryEntities = galleryRepository.findAll();
+//		List<GalleryDTO> galleryDTOList = new ArrayList<>();
+//
+//		for (GalleryEntity entity : galleryEntities) {
+//			GalleryDTO dto = new GalleryDTO();
+//
+//			dto.setGallImg(entity.getGallImg());
+//			dto.setGallExtension(entity.getGallExtension());
+//
+//			galleryDTOList.add(dto);
+//		}
+//
+//		return galleryDTOList;
+//	}
+
+	// mapstruct 사용
 	public List<GalleryDTO> galleryList() {
-		List<GalleryEntity> galleryEntities = galleryRepository.findAll();
-		List<GalleryDTO> galleryDTOList = new ArrayList<>();
-
-		for (GalleryEntity entity : galleryEntities) {
-			GalleryDTO dto = new GalleryDTO();
-
-			dto.setGallImg(entity.getGallImg());
-			dto.setGallExtension(entity.getGallExtension());
-
-			galleryDTOList.add(dto);
-		}
-
-		return galleryDTOList;
+		List<GalleryEntity> galleryEntities = galleryRepository.findAll();   // 갤러리엔터티를 리스트에 저장
+		return galleryEntities.stream()  // 스트림 사용
+				.map(GalleryMapper.instance::galleryToDTO)  // Mapstruct 사용하여 갤러리 entity -> DTO로 변환
+				.collect(Collectors.toList());  //  변환된 갤러리 DTO들을 리스트로 수집하여 반환
 	}
 	
 }
