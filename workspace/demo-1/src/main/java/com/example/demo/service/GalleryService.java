@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.GalleryDTO;
 import com.example.demo.entity.GalleryEntity;
+import com.example.demo.mapper.GalleryMapper;
 import com.example.demo.repository.GalleryRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.demo.mapper.GalleryMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,16 +35,18 @@ public class GalleryService {
 	// 업로드 할 위치
 	@Value("${part.upload.path}")
 	private String uploadPath;
+    private String fileExtension;
+    private Path savePath;
 
-	// 사진첩 작성
+    // 사진첩 작성
 	public List<GalleryDTO> createGallery(List<MultipartFile> uploadFiles) {
         List<GalleryDTO> galleryDTOList = new ArrayList<>();
 
         // 업로드 할 위치
 //		String uploadPath = "C:/Users/xooxpeak/Desktop/과외/Upload";
 
-        Path savePath=null;
-        String fileExtension=null;
+       // Path savePath=null;
+        //String fileExtension=null;
 
         for (MultipartFile uploadFile : uploadFiles) {
             // 이미지 파일만 업로드
@@ -86,7 +88,7 @@ public class GalleryService {
             // 저장할 파일 이름 중간에 "_"를 이용하여 구분
             String saveName = uploadPath + File.separator + folderPath + File.separator + uuid + "_" + fileName;
 
-            // Paths.get() 메서드는 특정 경로의 파일 정보를 가져옵니다.(경로 정의하기)
+            // Paths.get() 메서드는 특정 경로의 파일 정보를 가져옴 (경로 정의하기)
             savePath = Paths.get(saveName);
 
             try {
@@ -135,7 +137,7 @@ public class GalleryService {
 	}
 
 
-	// 사진첩 목록 보기
+// 사진첩 목록 조회
 
 // Mapstruct 사용 x
 //	public List<GalleryDTO> galleryList() {
@@ -161,5 +163,69 @@ public class GalleryService {
 				.map(GalleryMapper.instance::galleryToDTO)  // Mapstruct 사용하여 갤러리 entity -> DTO로 변환
 				.collect(Collectors.toList());  //  변환된 갤러리 DTO들을 리스트로 수집하여 반환
 	}
-	
+
+    // 해당 유저의 사진첩 조회
+    public GalleryEntity findById(Long id) {
+        return galleryRepository.findById(id).get();
+
+    }
+
+    // 바이트 배열
+//    public ResponseEntity<byte[]> galleryList(String fileName) {
+//        try {
+//            // 이미지 파일 경로 지정
+//            Path imagePath = Paths.get(uploadPath, fileName);
+//
+//            // 이미지 파일을 읽어서 바이트 배열로 변환
+//            byte[] imageBytes = Files.readAllBytes(imagePath);
+//
+//            // HTTP 응답 헤더에 이미지 파일의 MIME 타입을 설정
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.ALL);
+//
+//            // 바이트 배열과 200 OK 응답 반환
+//            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+//        } catch (IOException e) {
+//            // 이미지 파일을 읽어온느 도중 에러가 발생한 경우 예외 처리
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+
+    // 사진첩 상세보기
+//    public ResponseEntity<GalleryEntity<byte[]>> getGalleryById(Long id) {
+//        Optional<GalleryEntity> galleryOptional = galleryRepository.findById(id);
+//        if (galleryOptional.isPresent()) {
+//            GalleryEntity<byte[]> gallery = galleryOptional.get();
+//            return ResponseEntity.ok(gallery);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+
+
+
+    // 사진첩 수정
+//    public List<GalleryDTO> updateGallery(Long id, GalleryUpdateDTO) {
+//    //    GalleryEntity entityToDelete = GalleryMapper.instance.galleryToDTO(updateDTO);
+//        Gallery gallery = galleryRepository.findById(id).orElseThrow(() ->
+//                new IllegalArgumentException("해당 게시물이 없습니다 "+id));
+//        gallery.update(dto.getGallImg(), dto.getExtension());
+//    }
+
+
+
+    // 사진첩 삭제
+//    public void delete(Long id) {
+//        galleryRepository.deleteById(id);
+//    }
+
+
+//    public void delete(GalleryDeleteDTO deleteDTO) {
+//        GalleryEntity entityToDelete = GalleryMapper.instance.galleryToDTO(deleteDTO);
+//        // 엔터티를 삭제하는 코드 작성
+//        galleryRepository.delete(entityToDelete);
+//    }
 }
