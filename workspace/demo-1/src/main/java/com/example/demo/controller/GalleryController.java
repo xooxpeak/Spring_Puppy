@@ -5,6 +5,7 @@ import com.example.demo.entity.GalleryEntity;
 import com.example.demo.service.GalleryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,7 +59,7 @@ public class GalleryController {
 	  response data : 사진첩 삭제 성공
 	 */
 //	@DeleteMapping("/deleteGallery/{id}")
-//	public void deleteGallery(@PathVariable("id") Long id) {
+//	public void deleteGallery(@PathVariable Long id) {
 //		galleryService.delete(id);
 //	}
 	
@@ -69,18 +70,21 @@ public class GalleryController {
 	  request data : 
 	  response data : 사진첩 목록
 	 */
-//	@GetMapping("/gallery")
-//	public List<GalleryDTO> gallery() {
-//		return galleryService.galleryList();
-//	}
 	@GetMapping("/gallery")
-	public ResponseEntity<byte[]> galleryList(@RequestParam("id") Long id) throws IOException {
+	public List<GalleryDTO> gallery() {
+		return galleryService.galleryList();
+	}
+	@GetMapping(value = "/galleryView", produces={MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+	public ResponseEntity<byte[]> findById(@RequestParam("id") Long id) throws IOException {
+		// id에 해당하는 이미지 정보를 서비스로부터 가져옴
 		GalleryEntity galleryEntity = galleryService.findById(id);
-
+		// 파일 경로를 이용하여 이미지 파일을 읽기 위한 InputStream을 생성
 		InputStream inputStream = new FileInputStream(galleryEntity.getGallImg());
+		//  InputStream에서 모든 바이트를 읽어와 byte 배열에 저장
 		byte[] bytes = inputStream.readAllBytes();
+		// 스트림을 닫아 리소스를 해제
 		inputStream.close();
-
+		// 이미지를 byte 배열로 변환하여 ResponseEntity에 담아서 반환
 		return new ResponseEntity<byte[]>(bytes, HttpStatus.OK);
  	}
 	
