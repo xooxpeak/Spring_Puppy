@@ -1,10 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -14,8 +11,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class NoteEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -32,7 +30,7 @@ public class NoteEntity {
 	@Column(name = "poop", nullable = false)
 	private String poop;
 	
-	@Column(name = "condition", nullable = false)
+	@Column(name = "mood", nullable = false)
 	private String condition;
 	
 	@Column(name = "daily")
