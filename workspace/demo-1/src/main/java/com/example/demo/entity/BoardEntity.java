@@ -56,5 +56,5 @@ public class BoardEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "likeList_id")
 	private List<LikeListEntity> likeListEntityList;
-	
+
 }

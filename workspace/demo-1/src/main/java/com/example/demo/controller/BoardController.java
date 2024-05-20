@@ -1,13 +1,15 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.demo.dto.BoardDTO;
+import com.example.demo.service.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BoardController {
+
+	@Autowired
+	private BoardService boardService;
 
 	
 	/**
@@ -18,8 +20,8 @@ public class BoardController {
 	 */
 	
 	@PostMapping("/createBoard")
-	public Object createBoard() {
-		return null;
+	public BoardDTO createBoard(@RequestBody BoardDTO boardDTO) {
+		return boardService.createBoard(boardDTO);
 	}
 	
 	
