@@ -17,7 +17,7 @@ public class BoardEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "user_Id")
+	@Column(name = "user_id")
 	private Long userId;   
 	
 	@Column(name = "title", nullable = false)
@@ -25,7 +25,7 @@ public class BoardEntity {
 	
 	@Column(name = "content", nullable = false)
 	private String content;
-	
+
 	@Column(name = "board_date")
 	private Date boardDate;
 	
