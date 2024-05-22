@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -67,13 +66,17 @@ public class BoardService {
 
 
 	// 게시글 상세 조회
+//	public BoardDTO boardDetail(Long id) {
+//		Optional<BoardEntity> board = boardRepository.findById(id);
+//		if (board.isPresent()) {
+//			return BoardMapper.instance.boardToDTO(board.get());
+//		} else {
+//			throw new RuntimeException("게시글을 찾을 수 없습니다.");
+//		}
 	public BoardDTO boardDetail(Long id) {
-		Optional<BoardEntity> board = boardRepository.findById(id);
-		if (board.isPresent()) {
-			return BoardMapper.instance.boardToDTO(board.get());
-		} else {
-			throw new RuntimeException("게시글을 찾을 수 없습니다.");
-		}
+		return boardRepository.findById(id)
+				.map(boardMapper::boardToDTO)
+				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 	}
 
 }
