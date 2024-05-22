@@ -21,7 +21,6 @@ public class BoardController {
 	  request data : 글제목, 글내용, 사진, 동영상, 파일, 작성날짜, 작성시간
 	  response data : 게시글 작성 성공
 	 */
-	
 	@PostMapping("/createBoard")
 	public BoardDTO createBoard(@RequestBody BoardDTO boardDTO) {
 		return boardService.createBoard(boardDTO);
@@ -34,7 +33,6 @@ public class BoardController {
 	  request data : 글제목, 글내용, 사진, 동영상, 파일, 작성날짜, 작성시간
 	  response data : 게시글 수정 성공
 	 */
-	
 	@PutMapping("/updateBoard")
 	public Object updateBoard() {
 		return null;
@@ -47,7 +45,6 @@ public class BoardController {
 	  request data : 특정 날짜의 게시글 삭제
 	  response data : 게시글 삭제 성공
 	 */
-	
 	@DeleteMapping("/deleteBoard")
 	public Object deleteBoard() {
 		return null;
@@ -60,7 +57,6 @@ public class BoardController {
 	  request data : 
 	  response data : 게시글 목록
 	 */
-	
 	@GetMapping("/board")
 	public List<BoardDTO> board() {
 		return boardService.board();
@@ -73,10 +69,9 @@ public class BoardController {
 	  request data : 특정 날짜의 글제목, 글내용, 사진, 동영상, 파일, 작성날짜, 작성시간
 	  response data : 해당 날짜의 글제목, 글내용, 사진, 동영상, 파일, 작성날짜, 작성시간
 	 */
-	
 	@GetMapping("/boardDetail")
-	public Object galleryDetail() {
-		return null;
+	public BoardDTO boardDetail(@RequestParam Long id) {
+		return boardService.boardDetail(id);
 	}
 	
 	
@@ -86,7 +81,6 @@ public class BoardController {
 	  request data : 댓글 작성 아이디, 강아지 이름, 내용, 날짜, 시간
 	  response data : 댓글 작성 성공
 	 */
-	
 	@PostMapping("/createComment")
 	public Object createComment() {
 		return null;
@@ -99,7 +93,6 @@ public class BoardController {
 	  request data : 댓글 작성 아이디, 강아지 이름, 내용, 날짜, 시간
 	  response data : 댓글 수정 성공
 	 */
-	
 	@PutMapping("/updateComment")
 	public Object updateComment() {
 		return null;
@@ -112,7 +105,6 @@ public class BoardController {
 	  request data : 댓글 작성 아이디, 강아지 이름, 내용, 날짜, 시간 삭제
 	  response data : 댓글 삭제 성공
 	 */
-	
 	@DeleteMapping("/deleteComment")
 	public Object deleteComment() {
 		return null;
@@ -125,7 +117,6 @@ public class BoardController {
 	  request data : 
 	  response data : 
 	 */
-	
 	@GetMapping("/comment")
 	public Object comment() {
 		return null;
@@ -138,7 +129,6 @@ public class BoardController {
 	  request data : 
 	  response data : 좋아요 성공
 	 */
-	
 	@GetMapping("/userLike")
 	public Object userLike() {
 		return null;
@@ -151,7 +141,6 @@ public class BoardController {
 	  request data : 
 	  response data : 좋아요 중복 확인
 	 */
-	
 	@GetMapping("/dupUserLike")
 	public Object dupUserLike() {
 		return null;
@@ -164,7 +153,6 @@ public class BoardController {
 	  request data : 
 	  response data : 좋아요 한 게시글
 	 */
-	
 	@GetMapping("/userLikeList")
 	public Object userLikeList() {
 		return null;

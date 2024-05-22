@@ -5,7 +5,7 @@ import com.example.demo.entity.BoardEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring")  // 의존성 주입을 위함
 public interface BoardMapper {
 
     BoardMapper instance = Mappers.getMapper(BoardMapper.class);
