@@ -1,16 +1,20 @@
 package com.example.demo.service;
 
+import com.example.demo.config.SecurityUtil;
 import com.example.demo.dto.BoardDTO;
 import com.example.demo.entity.BoardEntity;
+import com.example.demo.entity.UserEntity;
 import com.example.demo.mapper.BoardMapper;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -28,18 +32,26 @@ public class BoardService {
 
 	// 게시글 작성
 	public BoardDTO createBoard(BoardDTO boardDTO) {
-//		 현재 로그인한 사용자의 ID를 가져옴
-//		UserEntity user = userRepository.findById(SecurityUtil.getCurrentUserId())
-//				.orElseThrow() -> new RuntimeException("로그인 유저 정보가 없습니다"));
 
-//		// 새로운 게시글 생성: 클라이언트로부터 받은 DTO를 서비스로 전달하기 위해 entity로 변환
-//		BoardEntity boardEntity = BoardMapper.instance.boardToEntity(boardDTO);
-//		// 게시글에 작성자 정보 설정
-//		boardEntity.setUserId(boardEntity.getUserId());
+		// 현재 사용자의 ID를 가져옴
+		String currentUserId = SecurityUtil.getCurrentUserId();
+
+		// 로그인된 사용자가 없는 경우 예외 처리
+		if (currentUserId == null || "anonymousUser".equals(currentUserId)) {
+			throw new RuntimeException("로그인한 사용자가 없습니다.");
+		}
+
+		// 현재 사용자의 ID로 회원 정보를 가져옴
+//		UserEntity userEntity = userRepository.findByUserId(currentUserId);
+//				.orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+		Optional<UserEntity> userOptional = Optional.ofNullable(userRepository.findByUserId(currentUserId));
+
+		// 사용자가 존재하지 않는 경우 예외 처리
+		UserEntity userEntity = userOptional.orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
 		// 새로운 게시글 생성: 클라이언트로부터 받은 DTO를 엔티티로 변환하고 필요한 필드 설정
 		BoardEntity boardEntity = BoardEntity.builder()
-				.userId(boardDTO.getUserId())
+				.userId(userEntity.getId())  // 현재 사용자의 ID로 설정
 				.title(boardDTO.getTitle())
 				.content(boardDTO.getContent())
 				.boardDate(Date.valueOf(LocalDate.now())) // 현재 날짜 설정
@@ -75,7 +87,17 @@ public class BoardService {
 //		}
 	public BoardDTO boardDetail(Long id) {
 		return boardRepository.findById(id)
-				.map(boardMapper::boardToDTO)
+//				.map(boardMapper::boardToDTO)
+				.map(boardEntity -> {
+					// 현재 인증된 사용자의 ID를 가져옴
+					String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
+					// 게시글 작성자의 ID를 가져옴
+					Long authorId = boardEntity.getUserId();
+					// 현재 사용자와 게시글 작성자의 ID가 일치하는지 확인
+					boolean isAuthor = currentUserId.equals(authorId.toString());
+					// 게시글 상세 정보를 DTO로 매핑하여 반환
+					return boardMapper.boardToDTOWithAuthor(boardEntity, isAuthor);
+				})
 				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 	}
 
