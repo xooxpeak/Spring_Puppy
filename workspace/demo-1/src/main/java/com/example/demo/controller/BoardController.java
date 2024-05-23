@@ -5,9 +5,6 @@ import com.example.demo.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/v1/auth/n")
 public class BoardController {
@@ -77,11 +74,13 @@ public class BoardController {
 			return boardService.board();
 		} else {
 			// 특정 게시글 상세 정보 반환
-			Map<String, Object> response = new HashMap<>();
-			response.put("boardDetail", boardService.boardDetail(id));
-			return response;
+//			Map<String, Object> response = new HashMap<>();
+//			response.put("boardDetail", boardService.boardDetail(id));
+//			return response;
+			return boardService.boardDetail(id);
 		}
 	}
+
 
 
 
