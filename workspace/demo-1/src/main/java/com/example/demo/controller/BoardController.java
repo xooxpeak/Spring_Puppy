@@ -5,7 +5,8 @@ import com.example.demo.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth/n")
@@ -57,22 +58,49 @@ public class BoardController {
 	  request data : 
 	  response data : 게시글 목록
 	 */
+//	@GetMapping("/board")
+//	public List<BoardDTO> board() {
+//		return boardService.board();
+//	}
+
+
+	/**
+	 기능 : 게시글 목록 및 상세보기
+	 url : /board
+	 request data : id (optional)
+	 response data : 게시글 목록 또는 특정 게시글 상세정보
+	 */
 	@GetMapping("/board")
-	public List<BoardDTO> board() {
-		return boardService.board();
+	public Object board(@RequestParam(name = "id", required = false) Long id) {
+		if (id == null) {
+			// 게시글 목록 반환
+			return boardService.board();
+		} else {
+			// 특정 게시글 상세 정보 반환
+			Map<String, Object> response = new HashMap<>();
+			response.put("boardDetail", boardService.boardDetail(id));
+			return response;
+		}
 	}
-	
-	
+
+
+
 	/**
 	  기능 : 게시글 상세보기
 	  url : /boardDetail
 	  request data : 특정 날짜의 글제목, 글내용, 사진, 동영상, 파일, 작성날짜, 작성시간
 	  response data : 해당 날짜의 글제목, 글내용, 사진, 동영상, 파일, 작성날짜, 작성시간
 	 */
-	@GetMapping("/boardDetail")
-	public BoardDTO boardDetail(@RequestParam Long id) {
-		return boardService.boardDetail(id);
-	}
+//	@GetMapping("/boardDetail")
+//	public BoardDTO boardDetail(@RequestParam Long id) {
+//		return boardService.boardDetail(id);
+//	}
+//	@GetMapping("/boardDetail")
+//	public Map<String, Object> boardDetail(@RequestParam Long id) {
+//		Map<String, Object> response = new HashMap<>();
+//		response.put("boardDetail", boardService.boardDetail(id));
+//		return response;
+//	}
 	
 	
 	/**

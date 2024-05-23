@@ -8,12 +8,13 @@ import com.example.demo.mapper.BoardMapper;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -85,20 +86,45 @@ public class BoardService {
 //		} else {
 //			throw new RuntimeException("게시글을 찾을 수 없습니다.");
 //		}
-	public BoardDTO boardDetail(Long id) {
-		return boardRepository.findById(id)
-//				.map(boardMapper::boardToDTO)
-				.map(boardEntity -> {
-					// 현재 인증된 사용자의 ID를 가져옴
-					String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
-					// 게시글 작성자의 ID를 가져옴
-					Long authorId = boardEntity.getUserId();
-					// 현재 사용자와 게시글 작성자의 ID가 일치하는지 확인
-					boolean isAuthor = currentUserId.equals(authorId.toString());
-					// 게시글 상세 정보를 DTO로 매핑하여 반환
-					return boardMapper.boardToDTOWithAuthor(boardEntity, isAuthor);
-				})
+//	public BoardDTO boardDetail(Long id) {
+//		return boardRepository.findById(id)
+////				.map(boardMapper::boardToDTO)
+//				.map(boardEntity -> {
+//					// 현재 인증된 사용자의 ID를 가져옴
+//					String currentUserId = SecurityUtil.getCurrentUserId();
+//					// 로그인된 사용자가 없는 경우 예외 처리
+//					if (currentUserId == null || "anonymousUser".equals(currentUserId)) {
+//						throw new RuntimeException("로그인한 사용자가 없습니다.");
+//					}
+//					// 게시글 작성자의 ID를 가져옴
+//					Long authorId = boardEntity.getUserId();
+//					// 현재 사용자와 게시글 작성자의 ID가 일치하는지 확인
+//					boolean isAuthor = currentUserId.equals(authorId.toString());
+//					// 게시글 상세 정보를 DTO로 매핑하여 반환
+//					return boardMapper.boardToDTOWithAuthor(boardEntity, isAuthor);
+//				})
+//				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+//	}
+
+	public Map<String, Object> boardDetail(Long id) {
+		BoardEntity boardEntity = boardRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+		String currentUserId = SecurityUtil.getCurrentUserId();
+		if (currentUserId == null || "anonymousUser".equals(currentUserId)) {
+			throw new RuntimeException("로그인한 사용자가 없습니다.");
+		}
+
+		Long authorId = boardEntity.getUserId();
+		boolean isAuthor = currentUserId.equals(authorId.toString());
+
+		BoardDTO boardDTO = BoardDTO.of(boardEntity, isAuthor);
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("board", boardDTO);
+		response.put("isAuthor", isAuthor);
+
+		return response;
 	}
 
 }
