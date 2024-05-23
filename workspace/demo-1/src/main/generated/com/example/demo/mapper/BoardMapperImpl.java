@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-05-22T10:32:43+0900",
+    date = "2024-05-22T21:57:34+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -47,6 +47,28 @@ public class BoardMapperImpl implements BoardMapper {
         boardDTO.boardDate( boardEntity.getBoardDate() );
         boardDTO.views( boardEntity.getViews() );
         boardDTO.userLike( boardEntity.getUserLike() );
+
+        return boardDTO.build();
+    }
+
+    @Override
+    public BoardDTO boardToDTOWithAuthor(BoardEntity boardEntity, boolean isAuthor) {
+        if ( boardEntity == null ) {
+            return null;
+        }
+
+        BoardDTO.BoardDTOBuilder boardDTO = BoardDTO.builder();
+
+        if ( boardEntity != null ) {
+            boardDTO.id( boardEntity.getId() );
+            boardDTO.userId( boardEntity.getUserId() );
+            boardDTO.title( boardEntity.getTitle() );
+            boardDTO.content( boardEntity.getContent() );
+            boardDTO.boardDate( boardEntity.getBoardDate() );
+            boardDTO.views( boardEntity.getViews() );
+            boardDTO.userLike( boardEntity.getUserLike() );
+        }
+        boardDTO.isAuthor( isAuthor );
 
         return boardDTO.build();
     }

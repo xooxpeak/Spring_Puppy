@@ -16,4 +16,8 @@ public interface BoardMapper {
     // DTO에서 Entity로 매핑: 클라이언트가 보낸 데이터를 데이터베이스에 저장하기 전에 Entity로 변환
     BoardDTO boardToDTO(BoardEntity boardEntity);
 
+    // 작성자와 동일한지 여부를 포함
+//    @Mapping(target = "isAuthor", source = "isAuthor")
+    BoardDTO boardToDTOWithAuthor(BoardEntity boardEntity, boolean isAuthor);
+
 }
