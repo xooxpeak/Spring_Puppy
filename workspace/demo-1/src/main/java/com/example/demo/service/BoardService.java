@@ -115,7 +115,8 @@ public class BoardService {
 			throw new RuntimeException("로그인한 사용자가 없습니다.");
 		}
 
-		Long authorId = boardEntity.getUserId();
+//		Long authorId = boardEntity.getUserId();
+		String authorId = boardEntity.getUser().getUserId();   // id(pk)가 아닌 userId로 하여 currentUserId와 맞춰줌
 		boolean isAuthor = currentUserId.equals(authorId.toString());
 
 		BoardDTO boardDTO = BoardDTO.of(boardEntity, isAuthor);
