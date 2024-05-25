@@ -128,4 +128,13 @@ public class BoardService {
 		return response;
 	}
 
+
+	// 게시글 삭제
+	public void deleteBoard(Long id) {
+		Optional<BoardEntity> boardEntity = boardRepository.findById(id);
+		boardRepository.delete(boardEntity.get());
+	}
+
+
+
 }

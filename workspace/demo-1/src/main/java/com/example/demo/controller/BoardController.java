@@ -44,8 +44,8 @@ public class BoardController {
 	  response data : 게시글 삭제 성공
 	 */
 	@DeleteMapping("/deleteBoard")
-	public Object deleteBoard() {
-		return null;
+	public void deleteBoard(@RequestParam(name = "id") Long id) {
+		boardService.deleteBoard(id);
 	}
 	
 	
