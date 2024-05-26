@@ -136,5 +136,41 @@ public class BoardService {
 	}
 
 
+	// 게시글 수정
+//	public BoardDTO updateBoard(Long id, BoardDTO boardDTO) {
+//		Optional<BoardEntity> board = boardRepository.findById(id);
+//		if (board.isPresent()) {
+//			BoardEntity boardEntity = board.get();
+//			// MapStruct를 사용하여 DTO에서 엔티티로 변환
+//			BoardMapper.instance.updateBoardToEntity(boardDTO, boardEntity);
+//			boardRepository.save(boardEntity);
+//			// MapStruct를 사용하여 엔티티에서 DTO로 다시 변환
+//			return BoardMapper.instance.boardToDTO(boardEntity);
+//		} else {
+//			throw new RuntimeException("게시글을 찾을 수 없습니다: " + id);
+//		}
+//	}
+
+// mapstruct 사용
+//	public BoardDTO updateBoard(Long id, BoardDTO boardDTO) {
+//		BoardEntity boardEntity = boardRepository.findById(id)
+//				.orElseThrow(() -> new IllegalArgumentException("해당 id의 글의 없습니다: " + id));
+//
+//		boardEntity = boardMapper.instance.updateBoardToEntity(boardDTO, boardEntity); // MapStruct를 사용하여 DTO를 엔티티로 변환
+//		boardRepository.save(boardEntity);
+//
+//		return boardMapper.instance.boardToDTO(boardEntity); // 변환된 엔티티를 DTO로 다시 변환하여 반환
+//	}
+
+	public BoardDTO updateBoard(Long id, BoardDTO boardDTO) {
+		BoardEntity board = boardRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid board ID: " + id));
+
+		board.setTitle(boardDTO.getTitle());
+		board.setContent(boardDTO.getContent());
+		boardRepository.save(board);
+
+		return boardMapper.instance.boardToDTO(board);
+	}
 
 }

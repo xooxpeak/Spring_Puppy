@@ -20,4 +20,7 @@ public interface BoardMapper {
 //    @Mapping(target = "isAuthor", source = "isAuthor")
     BoardDTO boardToDTOWithAuthor(BoardEntity boardEntity, boolean isAuthor);
 
+    //@Mapping(target = "id", ignore = true) // id는 업데이트 대상이 아니므로 무시
+    //BoardEntity updateBoardToEntity(BoardDTO boardDTO, BoardEntity boardEntity);
+
 }

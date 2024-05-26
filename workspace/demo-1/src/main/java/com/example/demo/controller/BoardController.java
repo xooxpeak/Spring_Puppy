@@ -28,12 +28,14 @@ public class BoardController {
 	/**
 	  기능 : 게시글 수정 ( 글 작성한 계정 )
 	  url : /updateBoard
-	  request data : 글제목, 글내용, 사진, 동영상, 파일, 작성날짜, 작성시간
+	  request data : 글제목, 글내용, 파일
 	  response data : 게시글 수정 성공
 	 */
 	@PutMapping("/updateBoard")
-	public Object updateBoard() {
-		return null;
+	public BoardDTO updateBoard(@RequestParam(name = "id") Long id, @RequestBody BoardDTO boardDTO) {
+		// 게시글 ID에 해당하는 게시물을 찾아옴
+		// BoardDTO updatedBoard = boardService.updateBoard(id, boardDTO);
+		return boardService.updateBoard(id, boardDTO);
 	}
 	
 	

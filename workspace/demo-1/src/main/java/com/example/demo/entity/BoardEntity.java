@@ -18,7 +18,7 @@ public class BoardEntity {
 	private Long id;
 
 	@Column(name = "user_id")
-	private Long userId;   
+	private Long userId;
 	
 	@Column(name = "title", nullable = false)
 	private String title;
@@ -46,16 +46,12 @@ public class BoardEntity {
 	private StoreEntity store;
 	
 	// CommentEntity와 일대다 관계
-//	@OneToMany(name = "comment_id", cascade = CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "comment_id")
 	@JoinColumn(name = "board_id")  // 외래 키를 CommentEntity에 설정
 	private List<CommentEntity> commentEntityList;
 
 	// LikeListEntity와 일대다 관계
-//	@OneToMany(name = "likeList_id", cascade = CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "likeList_id")
 	@JoinColumn(name = "board_id")  // 외래 키를 LikeListEntity에 설정
 	private List<LikeListEntity> likeListEntityList;
 
