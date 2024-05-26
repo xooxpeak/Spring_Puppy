@@ -48,13 +48,15 @@ public class BoardEntity {
 	// CommentEntity와 일대다 관계
 //	@OneToMany(name = "comment_id", cascade = CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "comment_id")
+//	@JoinColumn(name = "comment_id")
+	@JoinColumn(name = "board_id")  // 외래 키를 CommentEntity에 설정
 	private List<CommentEntity> commentEntityList;
 
 	// LikeListEntity와 일대다 관계
 //	@OneToMany(name = "likeList_id", cascade = CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "likeList_id")
+//	@JoinColumn(name = "likeList_id")
+	@JoinColumn(name = "board_id")  // 외래 키를 LikeListEntity에 설정
 	private List<LikeListEntity> likeListEntityList;
 
 }

@@ -18,18 +18,10 @@ public class CommentEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-//	@Column(name = "commentId")
-//	private Long commentId;
-	
-//	@Column(name = "board_id")
-//	private Long boardId;
-
-	@Column(name = "user_id")  
+	@Column(name = "user_id")
 	private Long userId;   
 	
 	@Column(name = "comment_date", nullable = false)
-// TODO : 지원하지 않는다고 하니 확인하기	
-//	@Temporal(TemporalType.TIMESTAMP)
 	private Date commentDate;
 	
 	@Column(name = "comment", nullable = false)
@@ -42,7 +34,7 @@ public class CommentEntity {
 	
 	// BoardEntity와 다대일 관계
 	@ManyToOne
-	@JoinColumn(name = "board_id", insertable = false, updatable = false)  // 추가함
+	@JoinColumn(name = "board_id", insertable = false, updatable = false)
 	private BoardEntity board;
 
 }
