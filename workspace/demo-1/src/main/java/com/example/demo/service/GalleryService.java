@@ -18,10 +18,7 @@ import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -41,12 +38,6 @@ public class GalleryService {
     // 사진첩 작성
 	public List<GalleryDTO> createGallery(List<MultipartFile> uploadFiles) {
         List<GalleryDTO> galleryDTOList = new ArrayList<>();
-
-        // 업로드 할 위치
-//		String uploadPath = "C:/Users/xooxpeak/Desktop/과외/Upload";
-
-       // Path savePath=null;
-        //String fileExtension=null;
 
         for (MultipartFile uploadFile : uploadFiles) {
             // 이미지 파일만 업로드
@@ -93,7 +84,7 @@ public class GalleryService {
 
             try {
                 // transferTo(file) : uploadFile에 파일을 업로드 하는 메서드
-                uploadFile.transferTo(savePath);
+                uploadFile.transferTo(savePath.toFile());
                 galleryDTOList.add(new GalleryDTO(fileName, uuid, folderPath));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -164,33 +155,11 @@ public class GalleryService {
 				.collect(Collectors.toList());  //  변환된 갤러리 DTO들을 리스트로 수집하여 반환
 	}
 
-    // 해당 유저의 사진첩 조회
+    // 해당 유저의 사진첩 상세조회
     public GalleryEntity findById(Long id) {
         return galleryRepository.findById(id).get();
 
     }
-
-    // 바이트 배열
-//    public ResponseEntity<byte[]> galleryList(String fileName) {
-//        try {
-//            // 이미지 파일 경로 지정
-//            Path imagePath = Paths.get(uploadPath, fileName);
-//
-//            // 이미지 파일을 읽어서 바이트 배열로 변환
-//            byte[] imageBytes = Files.readAllBytes(imagePath);
-//
-//            // HTTP 응답 헤더에 이미지 파일의 MIME 타입을 설정
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.ALL);
-//
-//            // 바이트 배열과 200 OK 응답 반환
-//            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-//        } catch (IOException e) {
-//            // 이미지 파일을 읽어온느 도중 에러가 발생한 경우 예외 처리
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
 
     // 사진첩 상세보기
