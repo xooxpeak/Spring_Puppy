@@ -35,11 +35,15 @@ public class BoardDTO {
 
 	private boolean isAuthor;  // 작성자인지 여부를 나타내는 필드 추가
 
+	@JsonProperty("user_Id")
+	private String strUserId;
+
 	// 정적 팩토리 메서드
 	public static BoardDTO of(BoardEntity boardEntity, boolean isAuthor) {
 		return BoardDTO.builder()
 				.id(boardEntity.getId())
 				.userId(boardEntity.getUserId())
+				.strUserId(boardEntity.getUser().getUserId())
 				.title(boardEntity.getTitle())
 				.content(boardEntity.getContent())
 				.boardDate(boardEntity.getBoardDate())

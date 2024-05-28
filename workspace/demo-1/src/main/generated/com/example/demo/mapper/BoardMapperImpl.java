@@ -2,12 +2,13 @@ package com.example.demo.mapper;
 
 import com.example.demo.dto.BoardDTO;
 import com.example.demo.entity.BoardEntity;
+import com.example.demo.entity.UserEntity;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-05-26T18:39:24+0900",
+    date = "2024-05-28T22:17:59+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -40,6 +41,7 @@ public class BoardMapperImpl implements BoardMapper {
 
         BoardDTO.BoardDTOBuilder boardDTO = BoardDTO.builder();
 
+        boardDTO.strUserId( boardEntityUserUserId( boardEntity ) );
         boardDTO.id( boardEntity.getId() );
         boardDTO.userId( boardEntity.getUserId() );
         boardDTO.title( boardEntity.getTitle() );
@@ -71,5 +73,20 @@ public class BoardMapperImpl implements BoardMapper {
         boardDTO.isAuthor( isAuthor );
 
         return boardDTO.build();
+    }
+
+    private String boardEntityUserUserId(BoardEntity boardEntity) {
+        if ( boardEntity == null ) {
+            return null;
+        }
+        UserEntity user = boardEntity.getUser();
+        if ( user == null ) {
+            return null;
+        }
+        String userId = user.getUserId();
+        if ( userId == null ) {
+            return null;
+        }
+        return userId;
     }
 }

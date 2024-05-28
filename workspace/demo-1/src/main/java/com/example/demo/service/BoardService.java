@@ -53,6 +53,7 @@ public class BoardService {
 		// 새로운 게시글 생성: 클라이언트로부터 받은 DTO를 엔티티로 변환하고 필요한 필드 설정
 		BoardEntity boardEntity = BoardEntity.builder()
 				.userId(userEntity.getId())  // 현재 사용자의 ID로 설정
+				.user(userEntity)  // UserEntity 객체를 설정
 				.title(boardDTO.getTitle())
 				.content(boardDTO.getContent())
 				.boardDate(Date.valueOf(LocalDate.now())) // 현재 날짜 설정
@@ -166,8 +167,10 @@ public class BoardService {
 		BoardEntity board = boardRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid board ID: " + id));
 
+		// 제목과 내용을 업데이트
 		board.setTitle(boardDTO.getTitle());
 		board.setContent(boardDTO.getContent());
+
 		boardRepository.save(board);
 
 		return boardMapper.boardToDTO(board);
