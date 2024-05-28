@@ -170,7 +170,7 @@ public class BoardService {
 		board.setContent(boardDTO.getContent());
 		boardRepository.save(board);
 
-		return boardMapper.instance.boardToDTO(board);
+		return boardMapper.boardToDTO(board);
 	}
 
 }
