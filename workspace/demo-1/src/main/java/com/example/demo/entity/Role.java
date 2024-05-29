@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,15 +21,9 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-//    private UserEntity user;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    private List<UserRole> userRoleList;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "role_id")
-//    private List<UserRole> userRoleList;
-
-//    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-//    private List<UserRole> userRoleList;
 
 }
