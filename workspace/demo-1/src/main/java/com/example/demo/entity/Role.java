@@ -25,5 +25,4 @@ public class Role {
     @JoinColumn(name = "role_id")
     private List<UserRole> userRoleList;
 
-
 }
