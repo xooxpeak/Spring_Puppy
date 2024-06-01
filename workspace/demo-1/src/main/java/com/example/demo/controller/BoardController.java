@@ -73,10 +73,11 @@ public class BoardController {
 			// 게시글 목록 반환
 			return boardService.board();
 		} else {
-			// 특정 게시글 상세 정보 반환
+			// 특정 게시글 상세 정보 반환 및 조회수 증가
 //			Map<String, Object> response = new HashMap<>();
 //			response.put("boardDetail", boardService.boardDetail(id));
 //			return response;
+			boardService.updateView(id);
 			return boardService.boardDetail(id);
 		}
 	}
@@ -100,7 +101,7 @@ public class BoardController {
 //		response.put("boardDetail", boardService.boardDetail(id));
 //		return response;
 //	}
-	
+
 	
 	/**
 	  기능 : 댓글 작성

@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity(name = "board")
+@Table(name = "board")
 @Getter@Setter
 @Builder
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class BoardEntity {
 	@Column(name = "board_date")
 	private Date boardDate;
 	
-	@Column(name = "views")
+	@Column(name = "views", columnDefinition = "integer default 0")
 	private int views;
 	
 	@Column(name = "user_like")
