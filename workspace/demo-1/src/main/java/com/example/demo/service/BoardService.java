@@ -6,6 +6,7 @@ import com.example.demo.entity.BoardEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.mapper.BoardMapper;
 import com.example.demo.repository.BoardRepository;
+import com.example.demo.repository.LikeListRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ public class BoardService {
 	
 	@Autowired
 	private BoardMapper boardMapper;
+
+	@Autowired
+	private LikeListRepository likeListRepository;
 
 	// 게시글 작성
 	public BoardDTO createBoard(BoardDTO boardDTO) {
@@ -116,15 +120,26 @@ public class BoardService {
 			throw new RuntimeException("로그인한 사용자가 없습니다.");
 		}
 
+		// TODO: currentUserId 사용할 수 없는지 재확인하기
+		UserEntity currentUser = userRepository.findByUserId(currentUserId);
+
+
+		// 게시글 작성자 확인
 //		Long authorId = boardEntity.getUserId();
 		String authorId = boardEntity.getUser().getUserId();   // id(pk)가 아닌 userId로 하여 currentUserId와 맞춰줌
-		boolean isAuthor = currentUserId.equals(authorId.toString());
+		boolean isAuthor = currentUserId.equals(authorId);
+
+		// 좋아요 여부 확인
+		boolean isLiked = likeListRepository.findByUserAndBoard(currentUser, boardEntity).isPresent();
+		int likeCount = likeListRepository.countByBoard(boardEntity);
 
 		BoardDTO boardDTO = BoardDTO.of(boardEntity, isAuthor);
 
 		Map<String, Object> response = new HashMap<>();
 		response.put("board", boardDTO);
 		response.put("isAuthor", isAuthor);
+		response.put("isLiked", isLiked);
+		response.put("likeCount", likeCount);
 
 		return response;
 	}
@@ -156,5 +171,40 @@ public class BoardService {
 	public int updateView(Long id) {
 		return boardRepository.updateView(id);
 	}
+
+	// 좋아요 토글
+//	public Map<String, Object> toggleLike(Long boardId) {
+//		String currentUserId = SecurityUtil.getCurrentUserId();
+//		if (currentUserId == null || "anonymousUser".equals(currentUserId)) {
+//			throw new RuntimeException("로그인한 사용자가 없습니다.");
+//		}
+//
+//		UserEntity currentUser = userRepository.findByUserId(currentUserId)
+//				.orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+//
+//		BoardEntity boardEntity = boardRepository.findById(boardId)
+//				.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+//
+//		Optional<LikeListEntity> existingLike = likeListRepository.findByUserAndBoard(currentUser, boardEntity);
+//		boolean isLiked;
+//		if (existingLike.isPresent()) {
+//			likeListRepository.deleteByUserAndBoard(currentUser, boardEntity);
+//			isLiked = false;
+//		} else {
+//			LikeListEntity likeListEntity = new LikeListEntity();
+//			likeListEntity.setUser(currentUser);
+//			likeListEntity.setBoard(boardEntity);
+//			likeListRepository.save(likeListEntity);
+//			isLiked = true;
+//		}
+//
+//		int likeCount = likeListRepository.countByBoard(boardEntity);
+//
+//		Map<String, Object> response = new HashMap<>();
+//		response.put("isLiked", isLiked);
+//		response.put("likeCount", likeCount);
+//
+//		return response;
+//	}
 
 }

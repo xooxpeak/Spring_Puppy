@@ -10,6 +10,8 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class LikeListService {
@@ -38,26 +40,47 @@ public class LikeListService {
 					.build();
 		}
 
-		// 이미 좋아요 했다면?
-		if (likeListRepository.findByUserAndBoard(user, board).isPresent()) {
+		Optional<LikeListEntity> existingLike = likeListRepository.findByUserAndBoard(user, board);
+		if (existingLike.isPresent()) {
+			likeListRepository.delete(existingLike.get());
 			return ResDTO.builder()
-					.code("409")
-					.message("이미 좋아요를 눌렀습니다.")
+					.code("200")
+					.message("좋아요 취소 성공")
+					.build();
+		} else {
+			LikeListEntity likeListEntity = LikeListEntity.builder()
+					.board(board)
+					.user(user)
+					.build();
+			likeListRepository.save(likeListEntity);
+			return ResDTO.builder()
+					.code("200")
+					.message("좋아요 성공")
 					.build();
 		}
-
-		// 좋아요 안되어있다면?
-		LikeListEntity likeListEntity = LikeListEntity.builder()
-				.board(board)
-				.user(user)
-				.build();
-		likeListRepository.save(likeListEntity);
-
-		return ResDTO.builder()
-				.code("200")
-				.message("좋아요 성공")
-				.build();
 	}
+
+
+//		// 이미 좋아요 했다면?
+//		if (likeListRepository.findByUserAndBoard(user, board).isPresent()) {
+//			return ResDTO.builder()
+//					.code("409")
+//					.message("이미 좋아요를 눌렀습니다.")
+//					.build();
+//		}
+//
+//		// 좋아요 안되어있다면?
+//		LikeListEntity likeListEntity = LikeListEntity.builder()
+//				.board(board)
+//				.user(user)
+//				.build();
+//		likeListRepository.save(likeListEntity);
+//
+//		return ResDTO.builder()
+//				.code("200")
+//				.message("좋아요 성공")
+//				.build();
+//	}
 
 
 	
