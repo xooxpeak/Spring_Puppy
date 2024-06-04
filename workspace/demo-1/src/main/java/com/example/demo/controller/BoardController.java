@@ -74,15 +74,10 @@ public class BoardController {
 			return boardService.board();
 		} else {
 			// 특정 게시글 상세 정보 반환 및 조회수 증가
-//			Map<String, Object> response = new HashMap<>();
-//			response.put("boardDetail", boardService.boardDetail(id));
-//			return response;
 			boardService.updateView(id);
 			return boardService.boardDetail(id);
 		}
 	}
-
-
 
 
 	/**
@@ -102,7 +97,6 @@ public class BoardController {
 //		return response;
 //	}
 
-	
 	/**
 	  기능 : 댓글 작성
 	  url : /createComment
@@ -161,8 +155,8 @@ public class BoardController {
 	public Object userLike() {
 		return null;
 	}
-	
-	
+
+
 	/**
 	  기능 : 좋아요 중복 체크
 	  url : /dupUserLike

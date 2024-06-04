@@ -23,10 +23,8 @@ public class LikeListController {
      response data : 좋아요 성공
      */
     @PostMapping("/userLike/{boardId}")
-    public ResDTO insert(@PathVariable("boardId") Long boardId, Authentication authentication) {
-     //       ResDTO resDTO = likeListService.insert(id, authentication.getName());
+    public ResDTO insertLike(@PathVariable("boardId") Long boardId, Authentication authentication) {
         String userId = authentication.getName(); // 인증된 사용자의 이름을 userId로 사용
-        ResDTO resDTO = likeListService.insert(boardId, userId);
-        return resDTO;
+        return likeListService.insertLike(boardId, userId);
     }
 }
