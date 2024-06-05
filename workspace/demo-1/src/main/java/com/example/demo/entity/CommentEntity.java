@@ -1,10 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Date;
 
@@ -12,6 +9,7 @@ import java.sql.Date;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CommentEntity {
 	
 	@Id
@@ -19,8 +17,11 @@ public class CommentEntity {
 	private Long id;
 	
 	@Column(name = "user_id")
-	private Long userId;   
-	
+	private Long userId;
+
+	@Column(name = "board_id")
+	private Long boardId;
+
 	@Column(name = "comment_date", nullable = false)
 	private Date commentDate;
 	

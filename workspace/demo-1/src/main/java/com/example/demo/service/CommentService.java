@@ -12,7 +12,10 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +36,51 @@ public class CommentService {
 
 
 	// 댓글 작성
-	public Long saveComment(Long boardId, Long userId, CommentDTO commentDTO) {
+//	public Long saveComment(Long boardId, Long userId, CommentDTO commentDTO) {
+//
+//		// 현재 사용자의 ID를 가져옴
+//		String currentUserId = SecurityUtil.getCurrentUserId();
+//
+//		// 로그인된 사용자가 없는 경우 예외 처리
+//		if (currentUserId == null || "anonymousUser".equals(currentUserId)) {
+//			throw new RuntimeException("로그인한 사용자가 없습니다.");
+//		}
+//
+//		UserEntity user = userRepository.findById(userId)
+//				.orElseThrow(() -> new IllegalArgumentException("User not found"));
+//		BoardEntity board = boardRepository.findById(boardId)
+//				.orElseThrow(() -> new IllegalArgumentException("Board not found"));
+//
+//		// CommentEntity 생성 및 저장
+//		CommentEntity commentEntity = commentMapper.commentToEntity(commentDTO);
+//		commentEntity.setUser(user);
+//		commentEntity.setBoard(board);
+//		commentRepository.save(commentEntity);
+//
+//		return commentEntity.getId();
+//
+//	}
+
+//	public Long saveComment(Long boardId, Long userId, CommentDTO commentDTO) {
+//		// 사용자 확인
+//		UserEntity user = userRepository.findById(userId)
+//				.orElseThrow(() -> new IllegalArgumentException("User not found"));
+//
+//		// 게시글 확인
+//		BoardEntity board = boardRepository.findById(boardId)
+//				.orElseThrow(() -> new IllegalArgumentException("Board not found"));
+//
+//		// CommentEntity 생성 및 저장
+//		CommentEntity commentEntity = commentMapper.commentToEntity(commentDTO);
+//		commentEntity.setUser(user);
+//		commentEntity.setBoard(board);
+//		commentRepository.save(commentEntity);
+//
+//		return commentEntity.getId();
+//	}
+
+
+	public CommentDTO saveComment(Long boardId, CommentDTO commentDTO) {
 
 		// 현재 사용자의 ID를 가져옴
 		String currentUserId = SecurityUtil.getCurrentUserId();
@@ -43,29 +90,27 @@ public class CommentService {
 			throw new RuntimeException("로그인한 사용자가 없습니다.");
 		}
 
-		UserEntity user = userRepository.findById(userId)
-				.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		// 현재 사용자의 ID로 회원 정보를 가져옴
+		Optional<UserEntity> userOptional = Optional.ofNullable(userRepository.findByUserId(currentUserId));
+
+		// 사용자가 존재하지 않는 경우 예외 처리
+		UserEntity user = userOptional.orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 		BoardEntity board = boardRepository.findById(boardId)
 				.orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
-		// CommentEntity 생성 및 저장
-		CommentEntity commentEntity = commentMapper.commentToEntity(commentDTO);
-		commentEntity.setUser(user);
-		commentEntity.setBoard(board);
+		CommentEntity commentEntity = CommentEntity.builder()
+				.userId(user.getId())
+				.user(user)
+				.boardId(board.getId())
+				.board(board)
+				.comment(commentDTO.getComment())
+				.commentDate(Date.valueOf(LocalDate.now()))
+				.build();
+
 		commentRepository.save(commentEntity);
 
-//		CommentEntity comment = new CommentEntity();
-//		comment.setBoardId(boardId);
-//		comment.setUserId(userId);
-//		comment.setCommentDate(new Date());
-//		comment.setComment(commentDTO.getComment());
-//		CommentEntity savedComment = commentRepository.save(comment);
-
-		return commentEntity.getId();
-
-
+		return CommentMapper.instance.commentToDto(commentEntity);
 	}
-
 
 	public List<CommentDTO> getCommentsByBoard(Long boardId) {
 		// 게시판 정보 찾기
