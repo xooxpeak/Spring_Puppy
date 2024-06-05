@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
@@ -15,5 +17,9 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     @Transactional
     @Query("update board b set b.views = b.views + 1 where b.id = :id")
     int updateView(@Param("id") Long id);
+
+    // 게시판 ID를 기반으로 댓글 목록 조회
+ //   List<CommentEntity> findByBoardId(Long id);
+    Optional<BoardEntity> findById(Long id);
 
 }

@@ -47,8 +47,9 @@ public class BoardEntity {
 	private StoreEntity store;
 	
 	// CommentEntity와 일대다 관계
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "board_id")  // 외래 키를 CommentEntity에 설정
+	@OrderBy("id asc") // 댓글 정렬
 	private List<CommentEntity> commentEntityList;
 
 	// LikeListEntity와 일대다 관계

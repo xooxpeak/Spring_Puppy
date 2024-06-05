@@ -1,14 +1,9 @@
 package com.example.demo.dto;
 
-import java.sql.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -21,10 +16,14 @@ public class CommentDTO {
 	
 	@JsonProperty("user_id")
 	private Long userId;
+
+	@JsonProperty("board_id")
+	private Long boardId;
 	
-	@JsonProperty("commen_date")
+	@JsonProperty("comment_date")
 	private Date commentDate;
-	
+//	private String commentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+
 	@JsonProperty("comment")
 	private String comment;
 }
