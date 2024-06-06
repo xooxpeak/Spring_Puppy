@@ -53,7 +53,16 @@ public class CommentService {
 		commentEntity.setUser(user);
 		commentEntity.setBoard(board);
 		commentRepository.save(commentEntity);
+
+//		CommentEntity comment = new CommentEntity();
+//		comment.setBoardId(boardId);
+//		comment.setUserId(userId);
+//		comment.setCommentDate(new Date());
+//		comment.setComment(commentDTO.getComment());
+//		CommentEntity savedComment = commentRepository.save(comment);
+
 		return commentEntity.getId();
+
 
 	}
 

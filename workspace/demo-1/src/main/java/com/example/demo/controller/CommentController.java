@@ -20,9 +20,13 @@ public class CommentController {
      * request data : 댓글 작성 아이디, 강아지 이름, 내용, 날짜, 시간
      * response data : 댓글 작성 성공
      */
-    @PostMapping("/saveComment/{id}")
-    public Long saveComment(@PathVariable("id") Long id, @RequestParam(name = "user_id") Long userId, @RequestBody CommentDTO commentDTO) {
-        return commentService.saveComment(id, userId, commentDTO);
+    @PostMapping("/saveComment/{board_id}")
+    public Long saveComment(@PathVariable("board_id") Long boardId,  @RequestParam(name = "user_id", required = false) Long userId, @RequestBody CommentDTO commentDTO) {
+        System.out.println("Received request to save comment");
+        System.out.println("Board ID: " + boardId);
+        System.out.println("User ID: " + userId);
+        System.out.println("Comment: " + commentDTO.getComment());
+        return commentService.saveComment(boardId, userId, commentDTO);
     }
 
 
