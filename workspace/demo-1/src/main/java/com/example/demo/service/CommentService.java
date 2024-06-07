@@ -112,8 +112,10 @@ public class CommentService {
 		return CommentMapper.instance.commentToDto(commentEntity);
 	}
 
+	
+	// 댓글 조회
 	public List<CommentDTO> getCommentsByBoard(Long boardId) {
-		// 게시판 정보 찾기
+		// 특정 게시글 찾기
 		BoardEntity board = boardRepository.findById(boardId)
 				.orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
