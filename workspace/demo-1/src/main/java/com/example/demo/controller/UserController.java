@@ -41,6 +41,12 @@ public class UserController {
 	}
 
 
+	@GetMapping("/kakaoLogin")
+	public void kakaoLogin() {
+
+	}
+
+
 	@PostMapping("/test")
 	public int test(){
 		return 1;
