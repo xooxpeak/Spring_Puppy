@@ -11,6 +11,7 @@ import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -146,11 +147,36 @@ public class UserService {
 			//  토큰 정보 초기화
 			//tokenInfo.setRefreshToken(null);
 
-			return tokenInfo; }
-		catch (Exception e) {
+			return tokenInfo;
+		} catch (BadCredentialsException e) {
+			// 비밀번호가 틀렸을 때 발생하는 예외
+			return null;
+		} catch (Exception e) {
 			System.err.println(e);
 		}
 		return null;
 	}
+
+
+	// 3. userInfo 맵을 입력으로 받아 JWT 토큰을 반환하는 메서드
+	// userRepository에서 findByKakaoId(kakaoId) 생성 ?
+	// userEntity에 kakaoId 생성?
+//	public JwtToken kakaoLogin(Map<String, Object> userInfo) {
+//		// userInfo 맵에서 Kakao ID를 가져와 문자열로 변환
+//		String kakaoId = userInfo.get("id").toString();
+//
+//		// kakaoId를 사용하여 데이터베이스에서 사용자를 조회
+//		UserEntity user = userRepository.findByKakaoId(kakaoId)
+//				// 만약 사용자가 존재하지 않으면 새로운 사용자를 생성
+//				.orElseGet(() -> {
+//					UserEntity newUser = new UserEntity();
+//					newUser.setKakaoId(kakaoId);
+//					newUser.setUserId((String) userInfo.get("UserId"));
+//					return userRepository.save(newUser);
+//				});
+//
+//		// 사용자의 사용자 이름과 역할을 사용하여 JWT 토큰을 생성하고 반환
+//		//return jwtTokenProvider.generateToken();
+//	}
 
 }

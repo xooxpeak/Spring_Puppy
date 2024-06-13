@@ -52,4 +52,7 @@ public class UserDTO {
 	@JsonProperty("addr2")
 	private String addr2;
 
+	@JsonProperty("kakaoId")
+	private String kakaoId;
+
 }

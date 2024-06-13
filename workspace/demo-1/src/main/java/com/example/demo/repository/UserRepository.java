@@ -4,6 +4,8 @@ import com.example.demo.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {   // JpaRepository<Entity 클래스, PK 타입>
 	// 사용자의 이름이랑 이메일만 가져오기
@@ -26,5 +28,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {   // J
 //	Optional<UserEntity> findByUserId(String userId);
 
 	UserEntity findByUserId(String userId);
+
+	Optional<UserEntity> findByKakaoId(String kakaoId);
+
+//	Optional<UserEntity> findByUserId(String userId);
 
 }

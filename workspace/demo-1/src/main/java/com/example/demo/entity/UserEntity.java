@@ -42,6 +42,9 @@ public class UserEntity implements UserDetails {
 	@Column(name = "addr2", nullable = true)
 	private String addr2;
 
+	@Column(name = "kakaoId", nullable = true)
+	private String kakaoId;
+
 	// PuppyEntity 일대다 관계 추가
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "puppy_id")

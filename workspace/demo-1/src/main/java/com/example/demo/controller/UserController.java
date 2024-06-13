@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.LoginDTO;
 import com.example.demo.jwt.JwtToken;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.KakaoOAuthService;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	KakaoOAuthService kakaoOAuthService;
 
 	/**
 	 기능 : 로그인
@@ -41,8 +45,14 @@ public class UserController {
 	}
 
 
-	@GetMapping("/kakaoLogin")
-	public void kakaoLogin() {
+	@PostMapping("/kakaoLogin")
+	public JwtToken kakaoLogin(@RequestBody String code) {
+		String accessToken = KakaoOAuthService.getAccessToken(code);
+	//	Map<String, Object> userInfo = kakaoOAuthService.getUserInfo(accessToken);
+	//	JwtToken jwtToken = userService.kakaoLogin(userInfo);
+	//	Map<String, String> response = new HashMap<>();
+	//	response.put("accessToken", String.valueOf(jwtToken));
+		return null;
 
 	}
 
