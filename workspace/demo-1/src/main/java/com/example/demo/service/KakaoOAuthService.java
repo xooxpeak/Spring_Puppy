@@ -3,6 +3,8 @@ package com.example.demo.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -14,19 +16,19 @@ public class KakaoOAuthService {
 
     // application.properties에서 kakao.client-id 값을 가져와 clientId 변수에 주입
     @Value("${kakao.client-id}")
-    private static String clientId;  // 클라이언트 ID를 저장
+    private String clientId;  // 클라이언트 ID를 저장
 
     // application.properties에서 kakao.redirect-uri 값을 가져와 redirectUri 변수에 주입
     @Value("${kakao.redirect-uri}")
-    private static String redirectUri;  // 리다이렉트 URI를 저장
+    private String redirectUri;  // 리다이렉트 URI를 저장
 
     // application.properties에서 kakao.client-secret 값을 가져와 clientSecret 변수에 주입
     @Value("${kakao.client-secret}")
-    private static String clientSecret;
+    private String clientSecret;
 
 
     // code를 입력으로 받아 access token을 반환하는 메소드
-    public static String getAccessToken(String code) {
+    public String getAccessToken(String code) {
 
         // Kakao OAuth 토큰 요청 URL을 정의
         String tokenUrl = "https://kauth.kakao.com/oauth/token";
@@ -36,13 +38,14 @@ public class KakaoOAuthService {
 
         // HTTP 요청에 사용할 헤더를 생성
         HttpHeaders headers = new HttpHeaders();
-        // Content-Type 헤더를 설정합니다. 여기서는 URL 인코딩된 폼 데이터를 사용
+        // Content-Type 헤더를 설정. 여기서는 URL 인코딩된 폼 데이터를 사용
         headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 
         // 주어진 URL을 사용하여 URI 빌더를 생성
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(tokenUrl)
-                // grant_type 파라미터를 추가합니다. 여기서는 authorization_code를 사용
+                // grant_type 파라미터를 추가. 여기서는 authorization_code를 사용
                 .queryParam("grant_type", "authorization_code")
                 // client_id 파라미터를 추가하고 clientId 값을 사용
                 .queryParam("client_id", clientId)
@@ -52,6 +55,13 @@ public class KakaoOAuthService {
                 .queryParam("code", code)
                 // client_secret 파라미터를 추가하고 clientSecret 값을 사용
                 .queryParam("client_secret", clientSecret);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", clientId);
+        params.add("redirect_uri", redirectUri);
+        params.add("code", code);
+        params.add("client_secret", clientSecret);
 
         // 헤더를 포함한 HTTP 엔티티를 생성
         HttpEntity<?> entity = new HttpEntity<>(headers);
@@ -89,7 +99,8 @@ public class KakaoOAuthService {
         // HTTP 요청에 사용할 헤더를 생성
         HttpHeaders headers = new HttpHeaders();
         // Authorization 헤더를 설정. Bearer 토큰 방식으로 accessToken을 사용
-        headers.set("Authorization", "Bearer " + accessToken);
+    //    headers.set("Authorization", "Bearer " + accessToken);
+        headers.setBearerAuth(accessToken);
 
         // 헤더를 포함한 HTTP 엔티티를 생성
         HttpEntity<?> entity = new HttpEntity<>(headers);
