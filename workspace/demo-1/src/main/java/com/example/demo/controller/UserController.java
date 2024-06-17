@@ -6,6 +6,9 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.KakaoOAuthService;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +66,16 @@ public class UserController {
 
 	@PostMapping("/kakaoLogin")
 	public ResponseEntity<Map<String, String>> kakaoLogin(@RequestBody String code) {
-		String accessToken = kakaoOAuthService.getAccessToken(code);
+		JSONParser parser = new JSONParser();
+		String kakaoCode;
+		try {
+			JSONObject object = (JSONObject) parser.parse(code);
+			kakaoCode = (String) object.get("code");
+		} catch (ParseException e) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		String accessToken = kakaoOAuthService.getAccessToken(kakaoCode);
 		Map<String, Object> userInfo = kakaoOAuthService.getUserInfo(accessToken);
 		JwtToken jwtToken = userService.kakaoLogin(userInfo);
 
