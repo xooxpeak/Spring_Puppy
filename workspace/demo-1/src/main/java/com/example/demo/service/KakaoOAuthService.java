@@ -77,7 +77,7 @@ public class KakaoOAuthService {
 
         // 응답 상태 코드가 HTTP 200 OK인지 확인
         if (response.getStatusCode() == HttpStatus.OK) {
-            // 응답 바디를 맵 형태로 가져
+            // 응답 바디를 맵 형태로 가져옴
             Map<String, Object> responseBody = response.getBody();
             // 응답 바디에서 access_token 값을 가져와 문자열로 반환
             return (String) responseBody.get("access_token");
@@ -99,8 +99,9 @@ public class KakaoOAuthService {
         // HTTP 요청에 사용할 헤더를 생성
         HttpHeaders headers = new HttpHeaders();
         // Authorization 헤더를 설정. Bearer 토큰 방식으로 accessToken을 사용
-    //    headers.set("Authorization", "Bearer " + accessToken);
-        headers.setBearerAuth(accessToken);
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    //    headers.setBearerAuth(accessToken);
 
         // 헤더를 포함한 HTTP 엔티티를 생성
         HttpEntity<?> entity = new HttpEntity<>(headers);
@@ -108,7 +109,7 @@ public class KakaoOAuthService {
         // HTTP 요청을 보내고 응답을 받아옴
         ResponseEntity<Map> response = restTemplate.exchange(
                 userInfoUrl,  // 사용자 정보 요청 URL을 사용
-                HttpMethod.GET,  // HTTP 메소드는 GET을 사용
+                HttpMethod.POST,  // HTTP 메소드는 GET을 사용
                 entity,  // 요청 엔티티를 사용
                 Map.class  // 응답 바디를 맵 형태로 변환
         );

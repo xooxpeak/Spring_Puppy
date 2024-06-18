@@ -24,16 +24,16 @@ public class UserEntity implements UserDetails {
 	@Column(name = "user_Id", nullable = false, length = 30, unique = true)
 	private String userId;
 
-	@Column(name = "password", nullable = false, length = 50)
+	@Column(name = "password", nullable = true, length = 50)
 	private String password;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = true)
 	private String name;
 
-	@Column(name = "birth", nullable = false)
+	@Column(name = "birth", nullable = true)
 	private String birth;
 
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = true)
 	private String email;
 
 	@Column(name = "addr1", nullable = true)
