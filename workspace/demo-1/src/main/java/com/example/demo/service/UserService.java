@@ -15,11 +15,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -161,22 +165,45 @@ public class UserService {
 	// 3. userInfo 맵을 입력으로 받아 JWT 토큰을 반환하는 메서드
 	// userRepository에서 findByKakaoId(kakaoId) 생성 ?
 	// userEntity에 kakaoId 생성?
-//	public JwtToken kakaoLogin(Map<String, Object> userInfo) {
-//		// userInfo 맵에서 Kakao ID를 가져와 문자열로 변환
-//		String kakaoId = userInfo.get("id").toString();
-//
-//		// kakaoId를 사용하여 데이터베이스에서 사용자를 조회
-//		UserEntity user = userRepository.findByKakaoId(kakaoId)
-//				// 만약 사용자가 존재하지 않으면 새로운 사용자를 생성
-//				.orElseGet(() -> {
-//					UserEntity newUser = new UserEntity();
-//					newUser.setKakaoId(kakaoId);
-//					newUser.setUserId((String) userInfo.get("UserId"));
-//					return userRepository.save(newUser);
-//				});
-//
-//		// 사용자의 사용자 이름과 역할을 사용하여 JWT 토큰을 생성하고 반환
-//		//return jwtTokenProvider.generateToken();
-//	}
+	public JwtToken kakaoLogin(Map<String, Object> userInfo) {
+		// userInfo 맵에서 Kakao ID를 가져와 문자열로 변환
+		String kakaoId = userInfo.get("id").toString();
 
-}
+		// kakaoId를 사용하여 데이터베이스에서 사용자를 조회
+		UserEntity user = userRepository.findByKakaoId(kakaoId)
+				// 만약 사용자가 존재하지 않으면 새로운 사용자를 생성
+				.orElseGet(() -> {
+					UserEntity newUser = new UserEntity();
+					newUser.setKakaoId(kakaoId);
+					newUser.setUserId(kakaoId); // Kakao ID를 userId로 설정
+//					newUser.setUserId((String) userInfo.get("UserId"));
+					return userRepository.save(newUser);
+				});
+
+		// 사용자의 사용자 이름과 역할을 사용하여 JWT 토큰을 생성하고 반환
+//		return jwtTokenProvider.generateToken();
+
+			// 사용자 정보로부터 Spring Security의 UserDetails 객체 생성
+			UserDetails userDetails = createUserDetails(user);
+
+			// UserDetails 객체를 사용하여 Authentication 객체 생성
+			Authentication authentication = createAuthentication(userDetails);
+
+			// JWT 토큰 생성
+			return jwtTokenProvider.generateToken(authentication);
+		}
+
+	// UserEntity 정보를 바탕으로 UserDetails 객체 생성
+	private UserDetails createUserDetails(UserEntity user) {
+		return new User(user.getUserId(), "", Collections.emptyList());
+	}
+
+	// UserDetails 객체를 사용하여 Authentication 객체 생성
+	private Authentication createAuthentication(UserDetails userDetails) {
+		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+	}
+
+	}
+
+
+
