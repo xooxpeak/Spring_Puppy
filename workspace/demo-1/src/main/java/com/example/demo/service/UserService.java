@@ -149,7 +149,7 @@ public class UserService {
 			response.addCookie(cookie);
 
 			//  토큰 정보 초기화
-			//tokenInfo.setRefreshToken(null);
+			tokenInfo.setRefreshToken(null);
 
 			return tokenInfo;
 		} catch (BadCredentialsException e) {
@@ -163,8 +163,6 @@ public class UserService {
 
 
 	// 3. userInfo 맵을 입력으로 받아 JWT 토큰을 반환하는 메서드
-	// userRepository에서 findByKakaoId(kakaoId) 생성 ?
-	// userEntity에 kakaoId 생성?
 	public JwtToken kakaoLogin(Map<String, Object> userInfo) {
 		// userInfo 맵에서 Kakao ID를 가져와 문자열로 변환
 		String kakaoId = userInfo.get("id").toString();
@@ -175,13 +173,9 @@ public class UserService {
 				.orElseGet(() -> {
 					UserEntity newUser = new UserEntity();
 					newUser.setKakaoId(kakaoId);
-					newUser.setUserId(kakaoId); // Kakao ID를 userId로 설정
-//					newUser.setUserId((String) userInfo.get("UserId"));
+					newUser.setUserId(kakaoId); // KakaoID를 userId로 설정
 					return userRepository.save(newUser);
 				});
-
-		// 사용자의 사용자 이름과 역할을 사용하여 JWT 토큰을 생성하고 반환
-//		return jwtTokenProvider.generateToken();
 
 			// 사용자 정보로부터 Spring Security의 UserDetails 객체 생성
 			UserDetails userDetails = createUserDetails(user);
