@@ -1,8 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.UserEntity;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,38 +29,15 @@ public class UserDetailService implements UserDetailsService {
         return userRepository.findByUserId(userId);
     }
 
-//    public ResDTO login(String userId, String password, HttpServletResponse response) {
-//        // 1. Login ID/PW를 기반으로 Authentication 객체 생성
-//        // 이때 authentication은 인증 여부를 확인하는 authenticated 값이 false
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
-//
-//        // 2. 실제 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
-//        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-//        Authentication authentication = AuthenticationManagerBuilder.getObject().authenticate(authenticationToken);
-//
-//        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-//        JwtToken tokenInfo = JwtTokenProvider.generate
-//
-//        // 쿠키
-//        Cookie cookie = new Cookie("refreshToken", tokenInfo.getRefreshToken());
-//
-//        // expires in 7 days
-//        cookie.setMaxAge(7 * 24 * 60 * 60);
-//
-//        // optional properties
-//        cookie.setSecure(true);
-//        cookie.setHttpOnly(true);
-//        cookie.setPath("/");
-//
-//        // add cookie to response
-//        response.addCookie(cookie);
-//
-//        tokenInfo.setRefreshToken(null);
-//
-//        return ResDTO.builder()
-//                .message("로그인 성공")
-//                .data(tokenInfo)
-//                .build();
-//
-//    }
+    // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 return
+    private UserDetails createUserDetails(UserEntity user) {
+        return User.builder()
+                .username(user.getUserId())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .roles(user.getAuthorities().toArray(new String[0]))
+                .build();
+    }
+
+
+
 }

@@ -15,15 +15,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -169,11 +171,19 @@ public class UserService {
 
 		// kakaoId를 사용하여 데이터베이스에서 사용자를 조회
 		UserEntity user = userRepository.findByKakaoId(kakaoId)
-				// 만약 사용자가 존재하지 않으면 새로운 사용자를 생성
+				// 만약 사용자가 존재하지 않으면 -> 새로운 사용자를 생성
 				.orElseGet(() -> {
 					UserEntity newUser = new UserEntity();
 					newUser.setKakaoId(kakaoId);
 					newUser.setUserId(kakaoId); // KakaoID를 userId로 설정
+
+					// 사용자에게 UserRole 객체를 생성하고 이를 UserEntity의 역할 목록에 추가한 후 저장
+					List<UserRole> roleList = new ArrayList<>();   // UserRole 객체들을 저장할 ArrayList 생성
+					UserRole userRole = new UserRole();   // 새로운 UserRole 객체 생성
+					userRole.setRoleId(1L);   // 새로 생성한 UserRole 객체의 role_id를 설정
+					roleList.add(userRole);   // 생성한 UserRole 객체를 roleList에 추가
+					newUser.setRoleList(roleList);   // UserEntity에 roleList를 설정
+
 					return userRepository.save(newUser);
 				});
 
@@ -189,7 +199,12 @@ public class UserService {
 
 	// UserEntity 정보를 바탕으로 UserDetails 객체 생성
 	private UserDetails createUserDetails(UserEntity user) {
-		return new User(user.getUserId(), "", Collections.emptyList());
+//		return new User(user.getUserId(), "", Collections.emptyList());
+		List<GrantedAuthority> authorities = user.getRoleList().stream()
+				.map(userRole -> new SimpleGrantedAuthority(userRole.getRoles().getRoleName()))
+				.collect(Collectors.toList());
+
+		return new User(user.getUserId(), "", authorities);
 	}
 
 	// UserDetails 객체를 사용하여 Authentication 객체 생성

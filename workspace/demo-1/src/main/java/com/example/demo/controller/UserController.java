@@ -80,7 +80,7 @@ public class UserController {
 		JwtToken jwtToken = userService.kakaoLogin(userInfo);
 
 		Map<String, String> response = new HashMap<>();
-		response.put("access_token", jwtToken.getAccessToken());
+		response.put("accessToken", jwtToken.getAccessToken());
 
 		return ResponseEntity.ok(response);
 	}
