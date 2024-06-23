@@ -7,10 +7,12 @@ import com.example.demo.entity.UserRole;
 import com.example.demo.jwt.JwtToken;
 import com.example.demo.jwt.JwtTokenProvider;
 import com.example.demo.mapper.UserMapper;
+import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +41,12 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private RedisRepository redisRepository;
+
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -135,6 +144,10 @@ public class UserService {
 			// 3. 인증 정보를 기반으로 JWT 토큰 생성
 			// 이 토큰에는 사용자의 정보와 권한 등이 포함됨
 			JwtToken tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+			// REDIS
+			String key = UUID.randomUUID().toString();
+			stringRedisTemplate.opsForValue().set(key, tokenInfo.getRefreshToken());
 
 			// "refreshToken"이라는 이름의 쿠키를 생성
 			Cookie cookie = new Cookie("refreshToken", tokenInfo.getRefreshToken());
