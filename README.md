@@ -20,7 +20,7 @@
 <br>
 <br>
 
-# 사용 기술 및 개발환경경
+# 사용 기술 및 개발환경
 ![image](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/27ebf86a-9ade-4b55-9cab-a409e9fc6486)
 
 Java 17
@@ -32,14 +32,17 @@ MySQL <br>
 React
 <br>
 <br>
+
 # ERD
 ![image](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/91ebbeea-552b-401a-bbd8-8f1adce4412d)
 <br>
 <br>
+
 # API 명세서
 https://green-dosa-d72.notion.site/34dc1b5e86624c778e5c55779eeb06a9?v=4840f30dff1f4b5a8fedadb55fffd1bb&pvs=4
 <br>
 <br>
+
 # 주요 기능 (기능명세서)
 https://green-dosa-d72.notion.site/7ad192a5754941b6aa113854e86e9721?pvs=4 
  <br>
@@ -85,8 +88,9 @@ https://green-dosa-d72.notion.site/7ad192a5754941b6aa113854e86e9721?pvs=4
 
 3. 사진첩 <br>
 ![사진첩 작성](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/5c28a242-ff3c-41ea-b222-0030d7d69723)
-![사진첩 상세보기](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/d99cd895-77f2-41a1-bc4b-2906c0dc9bf4)
 ![사진첩 목록](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/2cc1a49b-edd5-46d5-a4e8-55485f95274a)
+![사진첩 상세보기](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/d99cd895-77f2-41a1-bc4b-2906c0dc9bf4)
+
 <br>
 
 4. 게시글 작성 <br>
