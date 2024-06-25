@@ -3,10 +3,10 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
 import java.util.List;
 
 @Entity(name = "puppy")
+@Table(name = "puppy")
 @Getter @Setter
 @Builder
 @AllArgsConstructor
@@ -16,26 +16,23 @@ public class PuppyEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-//	@Column(name = "puppyId")
-//	private String puppyId;
-	
-	@Column(name = "puppy_name", nullable = false)
+
+	@Column(name = "puppy_name")
 	private String puppyName;
 	
-	@Column(name = "gender", nullable = false)
-	private String gender;
+	@Column(name = "gender")
+	private String gender;  // 'M' 또는 'F' 값으로 설정
 	
-	@Column(name = "neutering", nullable = false)
-	private boolean neutering;   // TINYINT? boolean?
+	@Column(name = "neutering")
+	private String neutering;
 	
-	@Column(name = "puppy_birth", nullable = false)
-	private Date puppyBirth;
+	@Column(name = "puppy_birth")
+	private String puppyBirth;
 	
-	@Column(name = "breed", nullable = false)
+	@Column(name = "breed")
 	private String breed;
 	
-	@Column(name = "allergy", nullable = false)
+	@Column(name = "allergy")
 	private String allergy;
 	
 	@Column(name = "personality")

@@ -1,14 +1,7 @@
 package com.example.demo.dto;
 
-import java.sql.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -18,18 +11,21 @@ import lombok.Setter;
 public class PuppyDTO {
 
 	private Long id;
+
+	@JsonProperty("user_id")
+	private Long userId;
 	
 	@JsonProperty("puppy_name")
 	private String puppyName;
 	
 	@JsonProperty("gender")
-	private String gender;
+	private String gender;  // 'M' 또는 'F' 값으로 설정
 	
 	@JsonProperty("neutering")
-	private boolean neutering;
+	private String neutering;
 	
 	@JsonProperty("puppy_birth")
-	private Date puppyBirth;
+	private String puppyBirth;
 	
 	@JsonProperty("breed")
 	private String breed;
