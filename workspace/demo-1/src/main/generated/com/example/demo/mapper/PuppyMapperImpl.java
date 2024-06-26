@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-25T21:26:51+0900",
+    date = "2024-06-26T09:20:53+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -24,7 +24,7 @@ public class PuppyMapperImpl implements PuppyMapper {
         puppyEntity.id( puppyDTO.getId() );
         puppyEntity.puppyName( puppyDTO.getPuppyName() );
         puppyEntity.gender( puppyDTO.getGender() );
-        puppyEntity.neutering( puppyDTO.isNeutering() );
+        puppyEntity.neutering( puppyDTO.getNeutering() );
         puppyEntity.puppyBirth( puppyDTO.getPuppyBirth() );
         puppyEntity.breed( puppyDTO.getBreed() );
         puppyEntity.allergy( puppyDTO.getAllergy() );
@@ -46,7 +46,7 @@ public class PuppyMapperImpl implements PuppyMapper {
         puppyDTO.id( puppyEntity.getId() );
         puppyDTO.puppyName( puppyEntity.getPuppyName() );
         puppyDTO.gender( puppyEntity.getGender() );
-        puppyDTO.neutering( puppyEntity.isNeutering() );
+        puppyDTO.neutering( puppyEntity.getNeutering() );
         puppyDTO.puppyBirth( puppyEntity.getPuppyBirth() );
         puppyDTO.breed( puppyEntity.getBreed() );
         puppyDTO.allergy( puppyEntity.getAllergy() );
