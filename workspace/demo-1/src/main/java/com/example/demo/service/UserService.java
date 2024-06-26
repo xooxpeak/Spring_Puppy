@@ -145,7 +145,7 @@ public class UserService {
 			// 이 토큰에는 사용자의 정보와 권한 등이 포함됨
 			JwtToken tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-			// REDIS
+			// REDIS에 Refresh Token 저장
 			String key = UUID.randomUUID().toString();
 			stringRedisTemplate.opsForValue().set(key, tokenInfo.getRefreshToken());
 
@@ -225,7 +225,47 @@ public class UserService {
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 
+	// Redis에서 사용자의 Refresh Token을 가져오는 메서드
+//	public String getRedisRefreshToken(String userId) {
+//		return stringRedisTemplate.opsForValue().get(userId);
+//	}
+
+	// AccessToken 갱신 메서드
+//	public JwtToken refreshAccessToken(String refreshToken) {
+		// Redis에서 저장된 Refresh Token을 통해 사용자 ID 가져오기
+//		String userId = getUserIdFromRedis(refreshToken);
+
+//		if (userId != null) {
+			// 기존의 refreshToken으로 AccessToken 재발급
+//			String newAccessToken = generateNewAccessToken(userId);
+
+			// 갱신된 AccessToken과 refreshToken을 클라이언트에게 응답
+//			JwtToken newTokens = JwtToken.builder()
+//					.accessToken(newAccessToken)
+//					.refreshToken(refreshToken)
+//					.build();
+//
+//			return newTokens;
+//		}
+
+//		return null;  // refreshToken이 유효하지 않은 경우
+//	}
+
+
+	// Redis에서 Refresh Token을 통해 사용자 ID 가져오기
+//	private String getUserIdFromRedis(String refreshToken) {
+//		// Redis에서 refreshToken을 이용해 userId를 조회하는 로직
+//		return redisRepository.getUserIdByRefreshToken(refreshToken);
+//	}
+
+
+	// 새로운 AccessToken 생성 메서드
+//	private JwtToken generateNewAccessToken(String userId) {
+//		// 새로운 AccessToken을 생성하는 로직
+//		UserDetails userDetails = loadUserByUsername(userId); // 사용자 정보 로드
+//		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//		return jwtTokenProvider.generateToken(authentication);
+//	}
+
+
 	}
-
-
-
