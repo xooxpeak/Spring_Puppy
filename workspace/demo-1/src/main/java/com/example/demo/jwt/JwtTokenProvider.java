@@ -45,7 +45,7 @@ public class JwtTokenProvider {
         headers.put("typ", "JWT");
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 1800000);
+        Date accessTokenExpiresIn = new Date(now + 1800000);   // 30분
         String accessToken = Jwts.builder()
                 .setHeader(headers)
                 .setSubject(authentication.getName())
@@ -59,7 +59,7 @@ public class JwtTokenProvider {
                 .setHeader(headers)
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
-                .setExpiration(new Date(now + 86400000))
+                .setExpiration(new Date(now + 86400000))  // 1일
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -72,6 +72,7 @@ public class JwtTokenProvider {
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
+
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
@@ -142,8 +143,6 @@ public class JwtTokenProvider {
 //            throw new ApiException(ExceptionEnum.TOKEN_GENERATION_FAILED);
 //        }
 //    }
-
-
 
 
     // accessToken

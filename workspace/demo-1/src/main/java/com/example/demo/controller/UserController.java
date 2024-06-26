@@ -4,12 +4,14 @@ import com.example.demo.dto.LoginDTO;
 import com.example.demo.jwt.JwtToken;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.KakaoOAuthService;
+import com.example.demo.service.RedisService;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +30,9 @@ public class UserController {
 	UserService userService;
 
 	@Autowired
+	RedisService redisService;
+
+	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
@@ -39,11 +44,7 @@ public class UserController {
 	 request Data : 아이디, 비밀번호
 	 Response Data : 로그인 성공
 	 */
-
 	@PostMapping("/login")
-//	public JwtToken login(@RequestParam(value="userId") String userId, @RequestParam(value="password") String password) {
-//		return userService.login(userId, password);
-//	}
 	public JwtToken login(@RequestBody LoginDTO loginDTO) {
 		String userId = loginDTO.getUserId();
 		String password = loginDTO.getPassword();
@@ -52,18 +53,12 @@ public class UserController {
 	}
 
 
-//	@PostMapping("/kakaoLogin")
-//	public JwtToken kakaoLogin(@RequestBody String code) {
-//		String accessToken = KakaoOAuthService.getAccessToken(code);
-//		Map<String, Object> userInfo = kakaoOAuthService.getUserInfo(accessToken);
-//		JwtToken jwtToken = userService.kakaoLogin(userInfo);
-//		Map<String, String> response = new HashMap<>();
-//		response.put("accessToken", jwtToken.getAccessToken());
-//		return jwtToken;
-//	//	return userService.kakaoLogin(userInfo);
-//
-//	}
-
+	/**
+	 기능 : 카카오로그인
+	 url : /kakaoLogin
+	 request Data :
+	 Response Data : 로그인 성공
+	 */
 	@PostMapping("/kakaoLogin")
 	public ResponseEntity<Map<String, String>> kakaoLogin(@RequestBody String code) {
 		JSONParser parser = new JSONParser();
@@ -83,6 +78,42 @@ public class UserController {
 		response.put("accessToken", jwtToken.getAccessToken());
 
 		return ResponseEntity.ok(response);
+	}
+
+
+	/**
+	 기능 : Redis 사용해 Token 갱신
+	 url : /refreshToken
+	 request Data :
+	 Response Data : 로그인 성공
+	 */
+	// Redis
+	@PostMapping("/refreshToken")
+	public ResponseEntity<?> refreshToken(@RequestBody JwtToken jwtToken) {
+		String refreshToken = jwtToken.getRefreshToken();
+		// String currentUserId = SecurityUtil.getCurrentUserId();  // 현재 로그인된 사용자
+
+		JwtToken newToken = redisService.refreshAccessToken(refreshToken);
+
+		if (newToken != null) {
+			return ResponseEntity.ok(newToken);
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
+		}
+
+		// Redis에서 저장된 Refresh Token 가져오기
+		//String redisRefreshToken = userService.getRedisRefreshToken(currentUserId);
+
+		// 클라이언트의 Refresh Token과 Redis의 Refresh Token이 일치하는지 확인
+		//if (refreshToken.equals(redisRefreshToken)) {
+			// 새로운 Access Token 발급
+		//	String newAccessToken = userService.generateNewAccessToken(currentUserId);
+
+			// 새로운 Access Token을 반환
+		//	return ResponseEntity.ok(new JwtToken(newAccessToken));
+		//} else {
+		//	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
+		//}
 	}
 
 
