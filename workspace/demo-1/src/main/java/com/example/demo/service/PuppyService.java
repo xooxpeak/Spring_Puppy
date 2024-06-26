@@ -12,11 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+
 @Service
 public class PuppyService {
-	
-	@Autowired
-	private PuppyRepository puppyRepository;
+
+    @Autowired
+    private PuppyRepository puppyRepository;
 
     @Autowired
     private PuppyMapper puppyMapper;
@@ -24,6 +25,9 @@ public class PuppyService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     기능 : 강아지 등록
+     */
     public ResDTO savePuppy(PuppyDTO puppyDTO) {
 
         // 현재 사용자의 ID를 가져옴
@@ -49,4 +53,5 @@ public class PuppyService {
                 .data(puppyRepository.save(puppy))
                 .build();
     }
+
 }

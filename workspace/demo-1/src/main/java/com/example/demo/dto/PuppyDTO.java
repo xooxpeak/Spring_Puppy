@@ -11,9 +11,6 @@ public class PuppyDTO {
 
 	private Long id;
 
-	@JsonProperty("user_id")
-	private Long userId;
-	
 	@JsonProperty("puppy_name")
 	private String puppyName;
 	
