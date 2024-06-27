@@ -147,7 +147,11 @@ public class UserService {
 
 			// REDIS에 Refresh Token 저장
 			String key = UUID.randomUUID().toString();
-			stringRedisTemplate.opsForValue().set(key, tokenInfo.getRefreshToken());
+		//	stringRedisTemplate.opsForValue().set(key, tokenInfo.getRefreshToken());
+			// Refresh Token을 Redis에 저장할 때 사용자 이름을 키로 사용
+			 stringRedisTemplate.opsForValue().set(authentication.getName(), tokenInfo.getRefreshToken());
+			// 생성된 키를 사용자 이름과 매핑하여 별도의 Redis 키-값 쌍으로 저장
+			// stringRedisTemplate.opsForValue().set(authentication.getName(), key);
 
 			// "refreshToken"이라는 이름의 쿠키를 생성
 			Cookie cookie = new Cookie("refreshToken", tokenInfo.getRefreshToken());
@@ -163,8 +167,9 @@ public class UserService {
 			// add cookie to response 생성한 쿠키를 응답에 추가하여 클라이언트로 전송
 			response.addCookie(cookie);
 
+			// TODO: 필요한지 확인
 			//  토큰 정보 초기화
-			tokenInfo.setRefreshToken(null);
+			//tokenInfo.setRefreshToken(null);
 
 			return tokenInfo;
 		} catch (BadCredentialsException e) {

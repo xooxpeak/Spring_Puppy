@@ -90,17 +90,22 @@ public class UserController {
 	// Redis
 	@PostMapping("/refreshToken")
 	public ResponseEntity<?> refreshToken(@RequestBody JwtToken jwtToken) {
-		String refreshToken = jwtToken.getRefreshToken();
 		// String currentUserId = SecurityUtil.getCurrentUserId();  // 현재 로그인된 사용자
+		
+		// 클라이언트에서 전달된 Reresh Token을 받아옴
+		String refreshToken = jwtToken.getRefreshToken();
 
+		// RedisService의 refreshAccessToken을 사용하여 새로운 Access Token 발급
 		JwtToken newToken = redisService.refreshAccessToken(refreshToken);
 
+		// RedisService에서 반환된 결과를 반환 = 새로운 Access Token 발급하여 반환
 		if (newToken != null) {
 			return ResponseEntity.ok(newToken);
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 Refresh Token");
 		}
 
+		// 클라이언트의 Refresh Token과 Redis에 저장된 Refresh Token을 비교
 		// Redis에서 저장된 Refresh Token 가져오기
 		//String redisRefreshToken = userService.getRedisRefreshToken(currentUserId);
 
