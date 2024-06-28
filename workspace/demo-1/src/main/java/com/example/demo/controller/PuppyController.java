@@ -28,15 +28,15 @@ public class PuppyController {
 
 
 	/**
-	 기능 : 강아지 등록
-	 url : /savePuppy
-	 request data : 이름, 성별, 중성화여부, 생년월일, 종, 알러지 유무, 성격, 자기소개
-	 response data : 강아지 등록 성공
+	 기능 : 강아지 조회
+	 url : /puppy
+	 request data :
+	 response data : 강아지 조회 성공
 	 */
-	@GetMapping("/puppy/{userId}")
-	public List<PuppyDTO> getPuppy(@PathVariable(name = "userId") Long userId) {
-		return puppyService.getPuppy(userId);
-	}
+	@GetMapping("/puppy")
+	public List<PuppyDTO> getPuppy() {
+		return puppyService.getPuppy();
+		}
 
 	}
 

@@ -1,6 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.PuppyEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -10,7 +9,6 @@ import lombok.*;
 @Builder
 public class PuppyDTO {
 
-	@JsonProperty("id")
 	private Long id;
 
 	@JsonProperty("user_id")
@@ -43,6 +41,4 @@ public class PuppyDTO {
 	@JsonProperty("profile_img")
 	private String profileImg;
 
-	public PuppyDTO(PuppyEntity puppy) {
-	}
 }

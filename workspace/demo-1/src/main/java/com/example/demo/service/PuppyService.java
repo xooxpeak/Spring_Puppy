@@ -57,15 +57,29 @@ public class PuppyService {
                 .build();
     }
 
-    public List<PuppyDTO> getPuppy(Long userId) {
-        List<PuppyEntity> puppies = puppyRepository.findByUserId(userId);
+
+    /**
+     기능 : 강아지 조회
+     */
+    public List<PuppyDTO> getPuppy() {
+        // 현재 사용자의 ID를 가져옴
+        String currentUserId = SecurityUtil.getCurrentUserId();
+
+        // 로그인된 사용자가 없는 경우 예외 처리
+        if (currentUserId == null || "anonymousUser".equals(currentUserId)) {
+            throw new RuntimeException("로그인한 사용자가 없습니다.");
+        }
+
+        // 현재 사용자의 UserEntity를 가져옴
+        UserEntity currentUser = userRepository.findByUserId(currentUserId);
+
+        // 사용자의 강아지 목록 조회
+        List<PuppyEntity> puppies = puppyRepository.findByUserId(currentUser.getId());
+
         return puppies.stream()
                 .map(puppyMapper::puppyEntityToPuppyDTO)
                 .collect(Collectors.toList());
-//        List<PuppyEntity> puppies = userRepository.findPuppiesByUserId(id);
-//        return puppies.stream()
-//                .map(puppyMapper::puppyEntityToPuppyDTO) // puppyEntity를 puppyDTO로 변환
-//                .collect(Collectors.toList());
 
     }
+
 }
