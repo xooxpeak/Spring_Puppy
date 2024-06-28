@@ -11,6 +11,8 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -46,6 +48,7 @@ public class PuppyService {
 
         // puppyEntity에 현재 사용자 설정
         puppy.setUser(currentUser);
+        puppy.setUserId(currentUser.getId());
 
         return ResDTO.builder()
                 .code("200")
@@ -54,4 +57,15 @@ public class PuppyService {
                 .build();
     }
 
+    public List<PuppyDTO> getPuppy(Long userId) {
+        List<PuppyEntity> puppies = puppyRepository.findByUserId(userId);
+        return puppies.stream()
+                .map(puppyMapper::puppyEntityToPuppyDTO)
+                .collect(Collectors.toList());
+//        List<PuppyEntity> puppies = userRepository.findPuppiesByUserId(id);
+//        return puppies.stream()
+//                .map(puppyMapper::puppyEntityToPuppyDTO) // puppyEntity를 puppyDTO로 변환
+//                .collect(Collectors.toList());
+
+    }
 }

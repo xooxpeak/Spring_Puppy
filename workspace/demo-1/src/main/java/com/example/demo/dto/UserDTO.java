@@ -1,14 +1,9 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -54,5 +49,8 @@ public class UserDTO {
 
 	@JsonProperty("kakao_Id")
 	private String kakaoId;
+
+	@JsonProperty("puppy_id")
+	private Long puppyId;
 
 }
