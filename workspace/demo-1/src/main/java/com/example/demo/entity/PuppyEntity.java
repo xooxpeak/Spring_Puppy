@@ -1,11 +1,12 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
 
-@Entity(name = "puppy")
+@Entity
 @Table(name = "puppy")
 @Getter @Setter
 @Builder
@@ -60,6 +61,7 @@ public class PuppyEntity {
 	// UserEntity와 다대일 관계
 	@ManyToOne
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
+	@JsonBackReference
 	private UserEntity user;
 
 }
