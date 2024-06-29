@@ -34,9 +34,33 @@ public class PuppyController {
 	 response data : 강아지 조회 성공
 	 */
 	@GetMapping("/puppy")
-	public List<PuppyDTO> getPuppy() {
-		return puppyService.getPuppy();
+	public List<PuppyDTO> puppy() {
+		return puppyService.puppy();
 		}
+
+
+	/**
+	 기능 : 강아지 정보 수정 위한 상세 정보 조회
+	 url : /getPuppy
+	 request data :
+	 response data : 강아지 상세 정보
+	 */
+	@GetMapping("/getPuppy")
+	public PuppyDTO getPuppy(@RequestParam(name = "id", required = false) Long id) {
+		// 특정 강아지 상세 정보 조회 및 반환
+		return puppyService.getPuppy(id);
+	}
+
+	/**
+	 기능 : 강아지 정보 수정
+	 url : /editPuppy
+	 request data :
+	 response data : 강아지 정보 수정 성공
+	 */
+	@PostMapping("/editPuppy")
+	public PuppyDTO editPuppy(@RequestParam(name = "id") Long id, @RequestBody PuppyDTO puppyDTO) {
+		return puppyService.editPuppy(id, puppyDTO);
+	}
 
 	}
 

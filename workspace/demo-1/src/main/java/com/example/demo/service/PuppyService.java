@@ -61,7 +61,7 @@ public class PuppyService {
     /**
      기능 : 강아지 조회
      */
-    public List<PuppyDTO> getPuppy() {
+    public List<PuppyDTO> puppy() {
         // 현재 사용자의 ID를 가져옴
         String currentUserId = SecurityUtil.getCurrentUserId();
 
@@ -80,6 +80,42 @@ public class PuppyService {
                 .map(puppyMapper::puppyEntityToPuppyDTO)
                 .collect(Collectors.toList());
 
+    }
+    
+
+    /**
+     기능 : 특정 강아지 정보 수정 위한 상세 정보 조회
+     */
+    public PuppyDTO getPuppy(Long id) {
+        PuppyEntity puppy = puppyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 강아지 정보를 찾을 수 없습니다."));
+        PuppyDTO puppyDTO = puppyMapper.puppyEntityToPuppyDTO(puppy);
+        return puppyDTO;
+    }
+
+
+    /**
+     기능 : 강아지 정보 수정
+     */
+    public PuppyDTO editPuppy(Long id, PuppyDTO puppyDTO) {
+        // 강아지 찾기
+        PuppyEntity puppy = puppyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid board ID: " + id));
+
+        // 수정 (업데이트)
+        puppy.setPuppyName(puppyDTO.getPuppyName());
+        puppy.setPuppyBirth(puppyDTO.getPuppyBirth());
+        puppy.setBreed(puppyDTO.getBreed());
+        puppy.setGender(puppyDTO.getGender());
+        puppy.setNeutering(puppyDTO.getNeutering());
+        puppy.setAllergy(puppyDTO.getAllergy());
+        puppy.setPersonality(puppyDTO.getPersonality());
+        puppy.setIntroduction(puppyDTO.getIntroduction());
+
+        // 수정된 정보 저장
+        puppyRepository.save(puppy);
+
+        return puppyMapper.puppyEntityToPuppyDTO(puppy);
     }
 
 }
