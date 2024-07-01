@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-26T14:30:49+0900",
+    date = "2024-07-01T20:37:34+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -24,6 +24,7 @@ public class PuppyMapperImpl implements PuppyMapper {
 
         puppyEntity.user( puppyDTOToUserEntity( puppyDTO ) );
         puppyEntity.id( puppyDTO.getId() );
+        puppyEntity.userId( puppyDTO.getUserId() );
         puppyEntity.puppyName( puppyDTO.getPuppyName() );
         puppyEntity.gender( puppyDTO.getGender() );
         puppyEntity.neutering( puppyDTO.getNeutering() );

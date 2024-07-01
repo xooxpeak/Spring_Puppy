@@ -81,7 +81,7 @@ public class PuppyService {
                 .collect(Collectors.toList());
 
     }
-    
+
 
     /**
      기능 : 특정 강아지 정보 수정 위한 상세 정보 조회
@@ -118,4 +118,11 @@ public class PuppyService {
         return puppyMapper.puppyEntityToPuppyDTO(puppy);
     }
 
+    public void deletePuppy(Long id) {
+        PuppyEntity puppyEntity = puppyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid puppy ID: " + id));
+        puppyRepository.delete(puppyEntity);
+
+
+    }
 }

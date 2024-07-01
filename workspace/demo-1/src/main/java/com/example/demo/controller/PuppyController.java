@@ -62,6 +62,18 @@ public class PuppyController {
 		return puppyService.editPuppy(id, puppyDTO);
 	}
 
+
+	/**
+	 기능 : 강아지 정보 삭제
+	 url : /deletePuppy
+	 request data : puppy_id
+	 response data : 강아지 삭제 성공
+	 */
+	@DeleteMapping("/deletePuppy")
+	public void deletePuppy(@RequestParam(name = "id") Long id) {
+		puppyService.deletePuppy(id);
+	}
+
 	}
 
 
