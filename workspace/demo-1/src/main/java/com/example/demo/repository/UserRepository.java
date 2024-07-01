@@ -31,7 +31,13 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {   // J
 
 	Optional<UserEntity> findByKakaoId(String kakaoId);
 
+	UserEntity findByNaverId(String naverId);
+
 	Optional<UserEntity> findById(Long id);
+
+
+	// 사용자 ID로 등록된 강아지 목록 조회
+	//List<PuppyEntity> findPuppiesByUserId(Long userId);
 
 //	Optional<UserEntity> findByUserId(String userId);
 

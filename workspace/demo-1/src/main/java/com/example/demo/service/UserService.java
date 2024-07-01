@@ -181,7 +181,7 @@ public class UserService {
 		return null;
 	}
 
-
+	// 카카오 로그인
 	// 3. userInfo 맵을 입력으로 받아 JWT 토큰을 반환하는 메서드
 	public JwtToken kakaoLogin(Map<String, Object> userInfo) {
 		// userInfo 맵에서 Kakao ID를 가져와 문자열로 변환
@@ -215,6 +215,42 @@ public class UserService {
 			return jwtTokenProvider.generateToken(authentication);
 		}
 
+
+	// 네이버 로그인
+	public JwtToken naverLogin(Map<String, Object> userInfo) {
+		// userInfo 맵에서 Kakao ID를 가져와 문자열로 변환
+		String naverId = userInfo.get("id").toString();
+
+		// kakaoId를 사용하여 데이터베이스에서 사용자를 조회
+		UserEntity user = userRepository.findByKakaoId(naverId)
+				// 만약 사용자가 존재하지 않으면 -> 새로운 사용자를 생성
+				.orElseGet(() -> {
+					UserEntity newUser = new UserEntity();
+					newUser.setKakaoId(naverId);
+					newUser.setUserId(naverId); // KakaoID를 userId로 설정
+
+					// 사용자에게 UserRole 객체를 생성하고 이를 UserEntity의 역할 목록에 추가한 후 저장
+					List<UserRole> roleList = new ArrayList<>();   // UserRole 객체들을 저장할 ArrayList 생성
+					UserRole userRole = new UserRole();   // 새로운 UserRole 객체 생성
+					userRole.setRoleId(1L);   // 새로 생성한 UserRole 객체의 role_id를 설정
+					roleList.add(userRole);   // 생성한 UserRole 객체를 roleList에 추가
+					newUser.setRoleList(roleList);   // UserEntity에 roleList를 설정
+
+					return userRepository.save(newUser);
+				});
+
+		// 사용자 정보로부터 Spring Security의 UserDetails 객체 생성
+		UserDetails userDetails = createUserDetails(user);
+
+		// UserDetails 객체를 사용하여 Authentication 객체 생성
+		Authentication authentication = createAuthentication(userDetails);
+
+		// JWT 토큰 생성
+		return jwtTokenProvider.generateToken(authentication);
+	}
+
+
+
 	// UserEntity 정보를 바탕으로 UserDetails 객체 생성
 	private UserDetails createUserDetails(UserEntity user) {
 //		return new User(user.getUserId(), "", Collections.emptyList());
@@ -229,48 +265,6 @@ public class UserService {
 	private Authentication createAuthentication(UserDetails userDetails) {
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
-
-	// Redis에서 사용자의 Refresh Token을 가져오는 메서드
-//	public String getRedisRefreshToken(String userId) {
-//		return stringRedisTemplate.opsForValue().get(userId);
-//	}
-
-	// AccessToken 갱신 메서드
-//	public JwtToken refreshAccessToken(String refreshToken) {
-		// Redis에서 저장된 Refresh Token을 통해 사용자 ID 가져오기
-//		String userId = getUserIdFromRedis(refreshToken);
-
-//		if (userId != null) {
-			// 기존의 refreshToken으로 AccessToken 재발급
-//			String newAccessToken = generateNewAccessToken(userId);
-
-			// 갱신된 AccessToken과 refreshToken을 클라이언트에게 응답
-//			JwtToken newTokens = JwtToken.builder()
-//					.accessToken(newAccessToken)
-//					.refreshToken(refreshToken)
-//					.build();
-//
-//			return newTokens;
-//		}
-
-//		return null;  // refreshToken이 유효하지 않은 경우
-//	}
-
-
-	// Redis에서 Refresh Token을 통해 사용자 ID 가져오기
-//	private String getUserIdFromRedis(String refreshToken) {
-//		// Redis에서 refreshToken을 이용해 userId를 조회하는 로직
-//		return redisRepository.getUserIdByRefreshToken(refreshToken);
-//	}
-
-
-	// 새로운 AccessToken 생성 메서드
-//	private JwtToken generateNewAccessToken(String userId) {
-//		// 새로운 AccessToken을 생성하는 로직
-//		UserDetails userDetails = loadUserByUsername(userId); // 사용자 정보 로드
-//		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//		return jwtTokenProvider.generateToken(authentication);
-//	}
 
 
 	}

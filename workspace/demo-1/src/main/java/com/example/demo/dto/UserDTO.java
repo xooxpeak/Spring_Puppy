@@ -50,6 +50,9 @@ public class UserDTO {
 	@JsonProperty("kakao_Id")
 	private String kakaoId;
 
+	@JsonProperty("naver_Id")
+	private String naverId;
+
 	@JsonProperty("puppy_id")
 	private Long puppyId;
 

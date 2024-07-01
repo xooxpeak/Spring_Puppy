@@ -4,6 +4,7 @@ import com.example.demo.dto.LoginDTO;
 import com.example.demo.jwt.JwtToken;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.KakaoOAuthService;
+import com.example.demo.service.NaverOAuthService;
 import com.example.demo.service.RedisService;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,9 @@ public class UserController {
 
 	@Autowired
 	KakaoOAuthService kakaoOAuthService;
+
+	@Autowired
+	NaverOAuthService naverOAuthService;
 
 	/**
 	 기능 : 로그인
@@ -79,6 +83,51 @@ public class UserController {
 
 		return ResponseEntity.ok(response);
 	}
+
+
+	/**
+	 기능 : 네이버로그인
+	 url : /naverLogin
+	 request Data :
+	 Response Data : 로그인 성공
+	 */
+	@PostMapping("/naverLogin")
+	public ResponseEntity<Map<String, String>> naverLogin(@RequestBody String code, @RequestParam String state) {
+
+		JSONParser parser = new JSONParser();
+		String naverCode;
+		try {
+			JSONObject object = (JSONObject) parser.parse(code);
+			naverCode = (String) object.get("code");
+		} catch (ParseException e) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		String accessToken = naverOAuthService.getAccessToken(naverCode);
+		Map<String, Object> userInfo = naverOAuthService.getUserInfo(accessToken);
+		JwtToken jwtToken = userService.naverLogin(userInfo);
+
+		Map<String, String> response = new HashMap<>();
+		response.put("accessToken", jwtToken.getAccessToken());
+
+		return ResponseEntity.ok(response);
+	}
+
+//	@GetMapping("/naverLogin")
+//	public String naverLogin(HttpSession session) {
+//		String state = naverOAuthService.generateState(session);
+//		String redirectUri = "https://nid.naver.com/oauth2.0/authorize?response_type=code"
+//				+ "&client_id=" + naverOAuthService.getClientId()
+//				+ "&redirect_uri=" + naverOAuthService.getRedirectUri()
+//				+ "&state=" + state;
+//		return "redirect:" + redirectUri;
+//	}
+//
+//	@PostMapping("/naverLogin/callback")
+//	public Map<String, Object> naverLoginCallback(@RequestParam String code, @RequestParam String state, HttpSession session) {
+//		String accessToken = naverOAuthService.getAccessToken(code, state, session);
+//		return naverOAuthService.getUserInfo(accessToken);
+//	}
 
 
 	/**
