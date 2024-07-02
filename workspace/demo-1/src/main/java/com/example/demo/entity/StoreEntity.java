@@ -20,8 +20,11 @@ public class StoreEntity {
 	
 	@Column(name = "store_name", nullable = false)
 	private String storeName;
-	
-	@Column(name = "store_phone")
+
+	@Column(name = "manager_name", nullable = false)
+	private String managerName;
+
+	@Column(name = "storePhone")
 	private String storePhone;
 	
 	@Column(name = "store_addr1")
@@ -31,7 +34,7 @@ public class StoreEntity {
 	private String storeAddr2;
 	
 	@Column(name = "user_id")
-	private Long user_id;
+	private Long userId;
 	
 	// PuppyEntity와 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)
@@ -47,5 +50,11 @@ public class StoreEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "board_id")
 	private List<BoardEntity> boardEntityList;
+
+	// TODO: UserEntity와 다대일 관계
+//	@ManyToOne
+//	@JoinColumn(name = "user_id", insertable = false, updatable = false)
+//	@JsonBackReference
+//	private UserEntity user;
 
 }
