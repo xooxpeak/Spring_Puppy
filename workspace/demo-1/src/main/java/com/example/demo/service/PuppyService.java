@@ -118,11 +118,14 @@ public class PuppyService {
         return puppyMapper.puppyEntityToPuppyDTO(puppy);
     }
 
+
+    /**
+     기능 : 강아지 정보 삭제
+     */
     public void deletePuppy(Long id) {
         PuppyEntity puppyEntity = puppyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid puppy ID: " + id));
         puppyRepository.delete(puppyEntity);
-
-
     }
+
 }

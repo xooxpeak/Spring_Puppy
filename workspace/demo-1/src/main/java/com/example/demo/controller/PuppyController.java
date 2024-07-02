@@ -74,7 +74,7 @@ public class PuppyController {
 		puppyService.deletePuppy(id);
 	}
 
-	}
+}
 
 
 
