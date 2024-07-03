@@ -11,6 +11,9 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class StoreService {
@@ -54,5 +57,15 @@ public class StoreService {
 				.build();
 
 	}
-	
+
+
+	/**
+	 기능 : 유치원 목록 조회
+	 */
+	public List<StoreDTO> store() {
+		List<StoreEntity> store = storeRepository.findAll();  // 모든 유치원을 DB에서 조회
+		return store.stream()  // 조회된 각각의 storeEntity 객체를 스트림으로 변환
+				.map(storeMapper::storeToDTO)  // DTO로 변환
+				.collect(Collectors.toList());  // 리스트로 수집하여 반환
+	}
 }

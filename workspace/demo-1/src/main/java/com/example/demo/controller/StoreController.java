@@ -4,10 +4,9 @@ import com.example.demo.dto.ResDTO;
 import com.example.demo.dto.StoreDTO;
 import com.example.demo.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth/y")
@@ -30,10 +29,14 @@ public class StoreController {
 
     /**
      기능 : 유치원 목록 조회
-     url : /storeList
+     url : /store
      request data :
      response data :
      */
+    @GetMapping("/store")
+    public List<StoreDTO> store() {
+        return storeService.store();
+    }
 
 
     /**
