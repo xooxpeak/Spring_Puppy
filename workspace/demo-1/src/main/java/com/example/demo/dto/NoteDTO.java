@@ -25,4 +25,6 @@ public class NoteDTO {
 	
 	private String daily;
 
+	private Long puppyId;
+
 }

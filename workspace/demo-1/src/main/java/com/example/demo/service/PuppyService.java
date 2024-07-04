@@ -128,4 +128,15 @@ public class PuppyService {
         puppyRepository.delete(puppyEntity);
     }
 
+
+    /**
+     기능 : 알림장에서 강아지 선택을 위한 저장된 강아지 전체 목록 조회
+     */
+    public List<PuppyDTO> getAllPuppies() {
+        List<PuppyEntity> puppies = puppyRepository.findAll();
+        return puppies.stream()
+                .map(puppyMapper::puppyEntityToPuppyDTO)
+                .collect(Collectors.toList());
+    }
+
 }

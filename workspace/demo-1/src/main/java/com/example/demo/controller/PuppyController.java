@@ -74,6 +74,18 @@ public class PuppyController {
 		puppyService.deletePuppy(id);
 	}
 
+
+	/**
+	 기능 :  알림장에서 강아지 선택을 위한 저장된 강아지 전체 목록 조회
+	 url : /puppies
+	 request data : puppy_id
+	 response data :
+	 */
+	@GetMapping("/puppies")
+	public List<PuppyDTO> getAllPuppies() {
+		return puppyService.getAllPuppies();
+	}
+
 }
 
 
