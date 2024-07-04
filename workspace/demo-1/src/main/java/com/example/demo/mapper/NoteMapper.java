@@ -10,5 +10,7 @@ public interface NoteMapper {
 
     NoteMapper instance = Mappers.getMapper(NoteMapper.class);
 
-    NoteEntity noteDTOToNoteEntity(NoteDTO noteDTO);
+    NoteEntity noteToEntity(NoteDTO noteDTO);
+    NoteDTO noteToDTO(NoteEntity noteEntity);
+
 }

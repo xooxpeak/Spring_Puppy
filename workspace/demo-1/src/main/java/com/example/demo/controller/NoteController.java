@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/auth/n")
+@RequestMapping("/api/v1/auth/y")
 public class NoteController {
 
 	@Autowired
@@ -15,14 +15,13 @@ public class NoteController {
 
 	/**
 	  기능 : 알림장 작성  ( 훈련사 계정 )
-	  url : /createNote
+	  url : /saveNote
 	  request data : 날짜, 식사 및 간식(아침·점심·저녁·간식), 배변 상태(횟수·상태), 기분 및 컨디션, 오늘 하루
 	  response data : 알림장 작성 성공
 	 */
-	
-	@PostMapping("/createNote")
-	public ResDTO createNote(@RequestBody NoteDTO noteDTO) {
-		return noteService.createNote(noteDTO);
+	@PostMapping("/saveNote")
+	public ResDTO saveNote(@RequestBody NoteDTO noteDTO) {
+		return noteService.saveNote(noteDTO);
 	}
 	
 	

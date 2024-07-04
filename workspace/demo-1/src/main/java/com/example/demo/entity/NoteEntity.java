@@ -6,7 +6,8 @@ import lombok.*;
 import java.sql.Date;
 import java.util.List;
 
-@Entity(name = "note")
+@Entity
+@Table(name = "note")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,22 +19,22 @@ public class NoteEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-//	@Column(name = "noteId")
-//	private Long noteId;
-	
-	@Column(name = "note_date", nullable = false)
-	private Date noteDate;   
-	
+	@Column(name = "note_date")
+	private Date noteDate;
+
 	@Column(name = "meal", nullable = false)
 	private String meal;
-	
-	@Column(name = "poop", nullable = false)
-	private String poop;
+
+	@Column(name = "poop_frequency", nullable = false)
+	private String poopFrequency;
+
+	@Column(name = "poop_condition", nullable = false)
+	private String poopCondition;
 	
 	@Column(name = "mood", nullable = false)
-	private String condition;
+	private String mood;
 	
-	@Column(name = "daily")
+	@Column(name = "daily", nullable = false)
 	private String daily;
 	
 	// PuppyEntity와 다대일 관계
