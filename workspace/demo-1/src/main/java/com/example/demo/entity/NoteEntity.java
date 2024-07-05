@@ -19,7 +19,7 @@ public class NoteEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "note_date")
+	@Column(name = "note_date", nullable = false)
 	private Date noteDate;
 
 	@Column(name = "meal", nullable = false)
@@ -36,6 +36,10 @@ public class NoteEntity {
 	
 	@Column(name = "daily", nullable = false)
 	private String daily;
+
+	// PuppyId를 직접 저장하는 컬럼 추가
+	@Column(name = "puppy_id", nullable = false)
+	private Long puppyId;
 	
 	// PuppyEntity와 다대일 관계
 	@ManyToOne

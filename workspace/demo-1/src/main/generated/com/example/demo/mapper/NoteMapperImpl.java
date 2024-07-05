@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-07-04T10:58:42+0900",
+    date = "2024-07-04T12:01:36+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -44,6 +44,7 @@ public class NoteMapperImpl implements NoteMapper {
         NoteDTO.NoteDTOBuilder noteDTO = NoteDTO.builder();
 
         noteDTO.puppyId( noteEntityPuppyId( noteEntity ) );
+        noteDTO.puppyName( noteEntityPuppyPuppyName( noteEntity ) );
         noteDTO.id( noteEntity.getId() );
         if ( noteEntity.getNoteDate() != null ) {
             noteDTO.noteDate( new Date( noteEntity.getNoteDate().getTime() ) );
@@ -82,5 +83,20 @@ public class NoteMapperImpl implements NoteMapper {
             return null;
         }
         return id;
+    }
+
+    private String noteEntityPuppyPuppyName(NoteEntity noteEntity) {
+        if ( noteEntity == null ) {
+            return null;
+        }
+        PuppyEntity puppy = noteEntity.getPuppy();
+        if ( puppy == null ) {
+            return null;
+        }
+        String puppyName = puppy.getPuppyName();
+        if ( puppyName == null ) {
+            return null;
+        }
+        return puppyName;
     }
 }
