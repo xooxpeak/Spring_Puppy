@@ -46,7 +46,7 @@ public class NoteController {
 	 response data : 해당 날짜, 식사 및 간식(아침·점심·저녁·간식), 배변 상태(횟수·상태), 기분 및 컨디션, 오늘 하루
 	 */
 	@GetMapping("/noteDetail/{id}")
-	public NoteDTO noteDetail(@PathVariable Long id) {
+	public NoteDTO noteDetail(@PathVariable(name = "id") Long id) {
 		return noteService.noteDetail(id);
 	}
 
