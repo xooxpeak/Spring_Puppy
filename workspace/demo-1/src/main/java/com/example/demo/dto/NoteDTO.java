@@ -27,4 +27,6 @@ public class NoteDTO {
 
 	private Long puppyId;
 
+	private String puppyName;
+
 }

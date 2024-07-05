@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-07-04T12:01:36+0900",
+    date = "2024-07-05T12:41:54+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -31,6 +31,7 @@ public class NoteMapperImpl implements NoteMapper {
         noteEntity.poopCondition( noteDTO.getPoopCondition() );
         noteEntity.mood( noteDTO.getMood() );
         noteEntity.daily( noteDTO.getDaily() );
+        noteEntity.puppyId( noteDTO.getPuppyId() );
 
         return noteEntity.build();
     }

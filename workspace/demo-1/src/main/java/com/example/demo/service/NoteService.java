@@ -45,7 +45,6 @@ public class NoteService {
         PuppyEntity puppy = puppyRepository.findById(noteDTO.getPuppyId()).orElseThrow(() -> new RuntimeException("Puppy not found"));
         note.setPuppy(puppy);
         note.setPuppyId(noteDTO.getPuppyId());
-//        note.setNoteDate(new Date());     // 날짜 note_date 값 설정
 
         // note_date 값이 설정되었는지 확인하고, 없으면 기본값으로 현재 날짜를 설정
         if (noteDTO.getNoteDate() != null) {

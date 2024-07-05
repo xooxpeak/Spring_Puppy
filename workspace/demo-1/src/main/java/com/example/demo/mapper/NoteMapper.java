@@ -15,6 +15,7 @@ public interface NoteMapper {
     NoteEntity noteToEntity(NoteDTO noteDTO);
 
     @Mapping(source = "puppy.id", target = "puppyId")
+    @Mapping(source = "puppy.puppyName", target = "puppyName")
     NoteDTO noteToDTO(NoteEntity noteEntity);
 
 }
