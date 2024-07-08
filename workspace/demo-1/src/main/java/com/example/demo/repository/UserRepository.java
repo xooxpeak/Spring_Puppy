@@ -17,28 +17,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {   // J
 	// existsBy : 해당 엔터티에 대해 특정 조건을 만족하는 레코드가 존재하는지 확인해주는 접두어
 	boolean existsByUserId(String userId);
 	
-	// 회원가입
-	// UserEntity save(UserEntity userEntity);
-
-//	@Query("SELECT ur.userId, ur.roleId FROM UserRole ur WHERE ur.userId = :userId")
-//	Optional<List<Object[]>> findUserRolesByUserId(@Param("userId") String userId);
-
-//	Optional<List<Object[]>> findByUserId(String userId);
-
-//	Optional<UserEntity> findByUserId(String userId);
-
 	UserEntity findByUserId(String userId);
 
 	Optional<UserEntity> findByKakaoId(String kakaoId);
 
-	UserEntity findByNaverId(String naverId);
+	Optional<UserEntity> findByNaverId(String naverId);
 
 	Optional<UserEntity> findById(Long id);
-
-
-	// 사용자 ID로 등록된 강아지 목록 조회
-	//List<PuppyEntity> findPuppiesByUserId(Long userId);
-
-//	Optional<UserEntity> findByUserId(String userId);
 
 }

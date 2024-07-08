@@ -1,14 +1,11 @@
 package com.example.demo.service;
 
-import jakarta.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,39 +27,8 @@ public class NaverOAuthService {
     @Value("${spring.security.oauth2.client.provider.naver.user-info-uri}")
     private String userInfoUri;
 
-    public String getClientId() {
-        return clientId;
-    }
-
-    public String getRedirectUri() {
-        return redirectUri;
-    }
-
-    SecureRandom random = new SecureRandom();
-    String state = new BigInteger(130, random).toString();
-
-    // state 값을 생성하여 반환
-//    public String generateState(HttpSession session) {
-//        String state = UUID.randomUUID().toString();
-//        session.setAttribute("oauth_state", state);
-//        return state;
-//    }
-
-    // state 값을 검증
-    public boolean validateState(HttpSession session, String state) {
-        String savedState = (String) session.getAttribute("oauth_state");
-        return savedState != null && savedState.equals(state);
-    }
 
     public String getAccessToken(String code) {
-
-        // 네이버 OAuth 토큰 요청 URL을 정의
-        //String tokenUrl = "https://nid.naver.com/oauth2.0/token";
-
-        // state 값 검증
-//        if (!validateState(session, state)) {
-//            throw new RuntimeException("Invalid state parameter");
-//        }
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -101,9 +67,6 @@ public class NaverOAuthService {
 
 
     public Map<String, Object> getUserInfo(String accessToken) {
-
-        // 네이버 사용자 정보 요청 URL을 정의
-        //String userInfoUrl = "https://openapi.naver.com/v1/nid/me";
 
         RestTemplate restTemplate = new RestTemplate();
 

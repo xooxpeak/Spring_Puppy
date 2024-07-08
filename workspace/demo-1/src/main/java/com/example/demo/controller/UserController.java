@@ -91,19 +91,17 @@ public class UserController {
 	 request Data :
 	 Response Data : 로그인 성공
 	 */
+	// "/login/oauth2/code/naver"
 	@PostMapping("/naverLogin")
-	public ResponseEntity<Map<String, String>> naverLogin(@RequestBody String code, @RequestParam String state) {
+	public ResponseEntity<Map<String, String>> naverLogin(@RequestBody Map<String, String> request) {
+		String code = request.get("code");
+		String state = request.get("state");
 
-		JSONParser parser = new JSONParser();
-		String naverCode;
-		try {
-			JSONObject object = (JSONObject) parser.parse(code);
-			naverCode = (String) object.get("code");
-		} catch (ParseException e) {
+		if (code == null || state == null) {
 			return ResponseEntity.badRequest().build();
 		}
 
-		String accessToken = naverOAuthService.getAccessToken(naverCode);
+		String accessToken = naverOAuthService.getAccessToken(code);
 		Map<String, Object> userInfo = naverOAuthService.getUserInfo(accessToken);
 		JwtToken jwtToken = userService.naverLogin(userInfo);
 
@@ -113,21 +111,31 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 
-//	@GetMapping("/naverLogin")
-//	public String naverLogin(HttpSession session) {
-//		String state = naverOAuthService.generateState(session);
-//		String redirectUri = "https://nid.naver.com/oauth2.0/authorize?response_type=code"
-//				+ "&client_id=" + naverOAuthService.getClientId()
-//				+ "&redirect_uri=" + naverOAuthService.getRedirectUri()
-//				+ "&state=" + state;
-//		return "redirect:" + redirectUri;
-//	}
+	// HttpRequestMethodNotSupportedException: Request method 'GET' is not supported
+//	@PostMapping("/naverLogin")
+//	public ResponseEntity<Map<String, String>> naverLogin(@RequestBody String code) {
+//		System.out.println("code: " + code);
 //
-//	@PostMapping("/naverLogin/callback")
-//	public Map<String, Object> naverLoginCallback(@RequestParam String code, @RequestParam String state, HttpSession session) {
-//		String accessToken = naverOAuthService.getAccessToken(code, state, session);
-//		return naverOAuthService.getUserInfo(accessToken);
+//		JSONParser parser = new JSONParser();
+//		String naverCode;
+//		try {
+//			JSONObject object = (JSONObject) parser.parse(code);
+//			naverCode = (String) object.get("code");
+//		} catch (ParseException e) {
+//			return ResponseEntity.badRequest().build();
+//		}
+//
+//		String accessToken = naverOAuthService.getAccessToken(naverCode);
+//		Map<String, Object> userInfo = naverOAuthService.getUserInfo(accessToken);
+//		JwtToken jwtToken = userService.naverLogin(userInfo);
+//
+//		Map<String, String> response = new HashMap<>();
+//		response.put("accessToken", jwtToken.getAccessToken());
+//
+//		return ResponseEntity.ok(response);
 //	}
+
+
 
 
 	/**

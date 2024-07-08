@@ -138,6 +138,60 @@ public class UserService {
 
 	/**
 	 *
+	 기능 : 훈련사 회원가입
+	 */
+	public ResDTO registerTrainer(UserDTO userDTO) {
+
+		if(userDTO.getUserId().equals("")) {
+			return ResDTO.builder()
+					.code("402")
+					.message("비어있는 아이디")
+					.data(false)
+					.build();
+		}
+
+		if(!userDTO.getPassword().equals(userDTO.getPassword2())) {
+			return ResDTO.builder()
+					.code("401")
+					.message("패스워드 불일치")
+					.data(false)
+					.build();
+		}
+
+		UserEntity userEntity = UserMapper.instance.userDTOToUserEntity(userDTO);
+
+		if(userRepository.existsByUserId(userEntity.getUserId())){
+			return ResDTO.builder()
+					.code("400")
+					.message("중복된 아이디")
+					.data(false)
+					.build();
+		}
+
+		userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+		Role role = new Role();
+		role.setId(2L); // 훈련사 역할 ID
+		role.setRoleName("ROLE_STORE_MANAGER"); // 역할 이름 설정
+
+		UserRole userRole = new UserRole();
+		userRole.setRoleId(2L); // 훈련사 역할 ID
+		userRole.setRoles(role);
+
+		List<UserRole> roleList = new ArrayList<>();
+		roleList.add(userRole);
+		userEntity.setRoleList(roleList);
+
+		return ResDTO.builder()
+				.code("200")
+				.message("훈련사 회원가입 성공")
+				.data(userRepository.save(userEntity))
+				.build();
+	}
+
+
+	/**
+	 *
 	 기능 : 로그인
 	 */
 	public JwtToken login(String userId, String password) {
@@ -238,12 +292,12 @@ public class UserService {
 		String naverId = userInfo.get("id").toString();
 
 		// kakaoId를 사용하여 데이터베이스에서 사용자를 조회
-		UserEntity user = userRepository.findByKakaoId(naverId)
+		UserEntity user = userRepository.findByNaverId(naverId)
 				// 만약 사용자가 존재하지 않으면 -> 새로운 사용자를 생성
 				.orElseGet(() -> {
 					UserEntity newUser = new UserEntity();
-					newUser.setKakaoId(naverId);
-					newUser.setUserId(naverId); // KakaoID를 userId로 설정
+					newUser.setNaverId(naverId);
+					newUser.setUserId(naverId); // naverID를 userId로 설정
 
 					// 사용자에게 UserRole 객체를 생성하고 이를 UserEntity의 역할 목록에 추가한 후 저장
 					List<UserRole> roleList = new ArrayList<>();   // UserRole 객체들을 저장할 ArrayList 생성
@@ -288,6 +342,5 @@ public class UserService {
 	private Authentication createAuthentication(UserDetails userDetails) {
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
-
 
 }
