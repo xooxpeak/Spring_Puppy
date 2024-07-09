@@ -296,10 +296,10 @@ public class UserService {
 	 기능 : 네이버 로그인
 	 */
 	public JwtToken naverLogin(Map<String, Object> userInfo) {
-		// userInfo 맵에서 Kakao ID를 가져와 문자열로 변환
+		// userInfo 맵에서 naver ID를 가져와 문자열로 변환
 		String naverId = userInfo.get("id").toString();
 
-		// kakaoId를 사용하여 데이터베이스에서 사용자를 조회
+		// naverId를 사용하여 데이터베이스에서 사용자를 조회
 		UserEntity user = userRepository.findByNaverId(naverId)
 				// 만약 사용자가 존재하지 않으면 -> 새로운 사용자를 생성
 				.orElseGet(() -> {
