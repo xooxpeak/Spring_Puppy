@@ -12,6 +12,7 @@ import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,10 +29,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
 	@Autowired
@@ -208,14 +209,21 @@ public class UserService {
 			// 이 토큰에는 사용자의 정보와 권한 등이 포함됨
 			JwtToken tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-			// REDIS에 Refresh Token 저장
-			String key = UUID.randomUUID().toString();
-		//	stringRedisTemplate.opsForValue().set(key, tokenInfo.getRefreshToken());
 			// Refresh Token을 Redis에 저장할 때 사용자 이름을 키로 사용
-			 stringRedisTemplate.opsForValue().set(authentication.getName(), tokenInfo.getRefreshToken());
-			// 생성된 키를 사용자 이름과 매핑하여 별도의 Redis 키-값 쌍으로 저장
-			// stringRedisTemplate.opsForValue().set(authentication.getName(), key);
+			//  stringRedisTemplate.opsForValue().set(authentication.getName(), tokenInfo.getRefreshToken());
 
+			// Redis에 이미 존재하는 리프레시 토큰이 있다면 업데이트
+			String existingRefreshToken = stringRedisTemplate.opsForValue().get(authentication.getName());
+
+			if (existingRefreshToken != null) {
+				// 기존 리프레시 토큰이 있는 경우 갱신
+				stringRedisTemplate.opsForValue().set(authentication.getName(), tokenInfo.getRefreshToken());
+			} else {
+				// 새로운 리프레시 토큰 저장
+				stringRedisTemplate.opsForValue().set(authentication.getName(), tokenInfo.getRefreshToken());
+			}
+
+			// HTTP-Only 쿠키에 리프레시 토큰 설정
 			// "refreshToken"이라는 이름의 쿠키를 생성
 			Cookie cookie = new Cookie("refreshToken", tokenInfo.getRefreshToken());
 
