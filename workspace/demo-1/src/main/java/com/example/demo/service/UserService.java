@@ -240,16 +240,16 @@ public class UserService {
 
 			// TODO: 필요한지 확인
 			//  토큰 정보 초기화
-			//tokenInfo.setRefreshToken(null);
+			tokenInfo.setRefreshToken(null);
 
 			return tokenInfo;
 		} catch (BadCredentialsException e) {
 			// 비밀번호가 틀렸을 때 발생하는 예외
-			return null;
+			throw new RuntimeException("비밀번호 불일치");
 		} catch (Exception e) {
 			System.err.println(e);
+			throw new RuntimeException("An error occurred while trying to log in");
 		}
-		return null;
 	}
 
 
