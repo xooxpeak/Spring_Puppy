@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.jwt.JwtToken;
 import com.example.demo.jwt.JwtTokenProvider;
 import com.example.demo.repository.RedisRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -12,19 +12,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
+@RequiredArgsConstructor
 public class RedisService {
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
+    private final RedisRepository redisRepository;
+    private final StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private RedisRepository redisRepository;
-
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+//    private JwtTokenProvider jwtTokenProvider;
+//
+//    private UserService userService;
+//
+//    private RedisRepository redisRepository;
+//
+//    private StringRedisTemplate stringRedisTemplate;
 
     /**
      기능 : Redis에서 저장된 리프레시 토큰을 검증하고 새로운 액세스 토큰을 생성
@@ -50,24 +53,24 @@ public class RedisService {
             JwtToken newAccessToken = jwtTokenProvider.generateToken(authentication);
             System.out.println("Valid refresh token.");
 
-            // TODO: 새로운 Refresh Token 생성 및 Redis에 저장 ?
-            // JwtToken newRefreshToken = jwtTokenProvider.generateToken(authentication);
-            // stringRedisTemplate.opsForValue().set(authentication.getName(), String.valueOf(newRefreshToken));
+            // 새로운 Refresh Token 생성 및 Redis에 저장
+            JwtToken newRefreshToken = jwtTokenProvider.generateToken(authentication);
+            stringRedisTemplate.opsForValue().set(authentication.getName(), String.valueOf(newRefreshToken));
 
             // 새로운 AccessToken과 RefreshToken을 반환
             return JwtToken.builder()
                     .grantType("Bearer")
-                    .accessToken(String.valueOf(newAccessToken))
-            //        .accessToken(newAccessToken.getAccessToken())
-                    .refreshToken(refreshToken)
-            //        .refreshToken(newRefreshToken.getRefresshToken())
+//                    .accessToken(String.valueOf(newAccessToken))
+                    .accessToken(newAccessToken.getAccessToken())
+                    //       .refreshToken(refreshToken)
+                    .refreshToken(newRefreshToken.getRefreshToken())
                     .build();
         }
 
         // 일치하지 않는다면 유효하지 않은 토큰
         System.out.println("Invalid refresh token.");
         System.out.println("User refreshToken: " + refreshToken);
-        System.out.println("Redis refreshToken for user " + authentication.getName() + ": " + redisRefreshToken);
+        System.out.println("Redis refreshToken" + authentication.getName() + ": " + redisRefreshToken);
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
         // return null;
 

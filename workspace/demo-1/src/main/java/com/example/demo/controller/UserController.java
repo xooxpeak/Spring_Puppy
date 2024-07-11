@@ -7,11 +7,11 @@ import com.example.demo.service.KakaoOAuthService;
 import com.example.demo.service.NaverOAuthService;
 import com.example.demo.service.RedisService;
 import com.example.demo.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,23 +24,30 @@ import java.util.Map;
 
 @Slf4j
 @RestController  // 두 개의 역할을 처리해줌
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/auth/n")
 public class UserController {
 
-	@Autowired
-	UserService userService;
+	private final UserService userService;
+	private final RedisService redisService;
+	private final UserRepository userRepository;
+	private final KakaoOAuthService kakaoOAuthService;
+	private final NaverOAuthService naverOAuthService;
 
-	@Autowired
-	RedisService redisService;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	KakaoOAuthService kakaoOAuthService;
-
-	@Autowired
-	NaverOAuthService naverOAuthService;
+//	@Autowired
+//	UserService userService;
+//
+//	@Autowired
+//	RedisService redisService;
+//
+//	@Autowired
+//	private UserRepository userRepository;
+//
+//	@Autowired
+//	KakaoOAuthService kakaoOAuthService;
+//
+//	@Autowired
+//	NaverOAuthService naverOAuthService;
 
 	/**
 	 기능 : 로그인
@@ -91,7 +98,6 @@ public class UserController {
 	 request Data :
 	 Response Data : 로그인 성공
 	 */
-	// "/login/oauth2/code/naver"
 	@PostMapping("/naverLogin")
 	public ResponseEntity<Map<String, String>> naverLogin(@RequestBody Map<String, String> request) {
 		String code = request.get("code");
@@ -111,32 +117,6 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 
-	// HttpRequestMethodNotSupportedException: Request method 'GET' is not supported
-//	@PostMapping("/naverLogin")
-//	public ResponseEntity<Map<String, String>> naverLogin(@RequestBody String code) {
-//		System.out.println("code: " + code);
-//
-//		JSONParser parser = new JSONParser();
-//		String naverCode;
-//		try {
-//			JSONObject object = (JSONObject) parser.parse(code);
-//			naverCode = (String) object.get("code");
-//		} catch (ParseException e) {
-//			return ResponseEntity.badRequest().build();
-//		}
-//
-//		String accessToken = naverOAuthService.getAccessToken(naverCode);
-//		Map<String, Object> userInfo = naverOAuthService.getUserInfo(accessToken);
-//		JwtToken jwtToken = userService.naverLogin(userInfo);
-//
-//		Map<String, String> response = new HashMap<>();
-//		response.put("accessToken", jwtToken.getAccessToken());
-//
-//		return ResponseEntity.ok(response);
-//	}
-
-
-
 
 	/**
 	 기능 : Redis 사용해 Token 갱신
@@ -147,13 +127,21 @@ public class UserController {
 	// Redis
 	@PostMapping("/refreshToken")
 	public ResponseEntity<?> refreshToken(@RequestBody JwtToken jwtToken) {
-		// String currentUserId = SecurityUtil.getCurrentUserId();  // 현재 로그인된 사용자
-		
-		// 클라이언트에서 전달된 Reresh Token을 받아옴
-		String refreshToken = jwtToken.getRefreshToken();
+//		// 클라이언트에서 전달된 Reresh Token을 받아옴
+//		String refreshToken = jwtToken.getRefreshToken();
+//		// RedisService의 refreshAccessToken을 사용하여 새로운 Access Token 발급
+//		JwtToken newToken = redisService.refreshAccessToken(refreshToken);
 
-		// RedisService의 refreshAccessToken을 사용하여 새로운 Access Token 발급
-		JwtToken newToken = redisService.refreshAccessToken(refreshToken);
+		String refreshToken = jwtToken.getRefreshToken();
+		if (refreshToken == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Refresh token is missing");
+		}
+		
+		System.out.println("액세스 토큰 갱신 요청");
+		System.out.println("Received jwtToken: " + jwtToken);
+		System.out.println("Received refreshToken: " + jwtToken.getRefreshToken());
+
+		JwtToken newToken = redisService.refreshAccessToken(jwtToken.getRefreshToken());
 
 		// RedisService에서 반환된 결과를 반환 = 새로운 Access Token 발급하여 반환
 		if (newToken != null) {
@@ -162,20 +150,6 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 Refresh Token");
 		}
 
-		// 클라이언트의 Refresh Token과 Redis에 저장된 Refresh Token을 비교
-		// Redis에서 저장된 Refresh Token 가져오기
-		//String redisRefreshToken = userService.getRedisRefreshToken(currentUserId);
-
-		// 클라이언트의 Refresh Token과 Redis의 Refresh Token이 일치하는지 확인
-		//if (refreshToken.equals(redisRefreshToken)) {
-			// 새로운 Access Token 발급
-		//	String newAccessToken = userService.generateNewAccessToken(currentUserId);
-
-			// 새로운 Access Token을 반환
-		//	return ResponseEntity.ok(new JwtToken(newAccessToken));
-		//} else {
-		//	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
-		//}
 	}
 
 

@@ -50,7 +50,6 @@ public class UserService {
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
@@ -240,7 +239,7 @@ public class UserService {
 
 			// TODO: 필요한지 확인
 			//  토큰 정보 초기화
-			tokenInfo.setRefreshToken(null);
+			// tokenInfo.setRefreshToken(null);
 
 			return tokenInfo;
 		} catch (BadCredentialsException e) {

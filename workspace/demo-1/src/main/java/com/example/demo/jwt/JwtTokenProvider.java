@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 
 import java.security.Key;
 import java.util.*;
@@ -45,7 +44,8 @@ public class JwtTokenProvider {
         headers.put("typ", "JWT");
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 1800000);   // 30분
+//        Date accessTokenExpiresIn = new Date(now + 1800000);   // 30분
+        Date accessTokenExpiresIn = new Date((System.currentTimeMillis() + 60000));  // 테스트용 1분
         String accessToken = Jwts.builder()
                 .setHeader(headers)
                 .setSubject(authentication.getName())
@@ -111,21 +111,24 @@ public class JwtTokenProvider {
         return false;
     }
 
+    // TODO: 추가
     // accessToken이 만료된 경우
-//    public JwtToken refreshToken(HttpServletRequest request) {
-//        // 쿠키에서 리프레시 토큰을 가져옴
-//            String refreshToken = getRefreshTokenFromCookie(request);
-//    try {
-//        // 리프레시 토큰을 사용하여 새로운 액세스 토큰 발급
-//        JwtToken newAccessToken = generateNewAccessToken(refreshToken);
-
-//        // 발급된 새로운 액세스 토큰을 클라이언트에게 반환
-//        return newAccessToken;
-//    } catch (Exception e) {
-//        log.error("Failed to refresh access token", e);
-//        throw new ApiException(ExceptionEnum.TOKEN_REFRESH_FAILED);
+//    public String refreshToken(String refreshToken) {
+//        Claims claims = parseClaims(refreshToken);
+//        if (claims.getExpiration().before(new Date())) {
+//            throw new RuntimeException("Refresh token is expired");
+//        }
+//        Authentication authentication = getAuthentication(refreshToken);
+//        return generateToken(authentication).getAccessToken();
 //    }
-//}
+//
+//    public String resolveRefreshToken(HttpServletRequest request) {
+//        String bearerToken = request.getHeader("Authorization-Refresh");
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+//            return bearerToken.substring(7);
+//        }
+//        return null;
+//    }
 
     // 리프레시 토큰을 사용하여 새로운 액세스 토큰을 발급하는 메서드
 //    private JwtToken generateNewAccessToken(String refreshToken) {
@@ -143,6 +146,8 @@ public class JwtTokenProvider {
 //            throw new ApiException(ExceptionEnum.TOKEN_GENERATION_FAILED);
 //        }
 //    }
+
+
 
 
     // accessToken
