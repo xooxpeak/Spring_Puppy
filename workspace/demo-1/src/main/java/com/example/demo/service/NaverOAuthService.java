@@ -31,7 +31,6 @@ public class NaverOAuthService {
     private String userInfoUri;
 
 
-    // TODO: 확인
     public String getAccessToken(String code) {
 
         RestTemplate restTemplate = new RestTemplate();
@@ -40,7 +39,6 @@ public class NaverOAuthService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
 
 
         // 요청 파라미터 설정
@@ -53,25 +51,6 @@ public class NaverOAuthService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-//        Map<String, String> params = new HashMap<>();
-//        params.put("grant_type", "authorization_code");
-//        params.put("client_id", clientId);
-//        params.put("client_secret", clientSecret);
-//        params.put("code", code);
-//        params.put("redirect_uri", redirectUri);
-////        params.put("state", state);
-//
-//        HttpEntity<Map<String, String>> request = new HttpEntity<>(params, headers);
-
-//        ResponseEntity<JSONObject> response = restTemplate.exchange(tokenUri, HttpMethod.POST, request, JSONObject.class);
-//        if (response.getStatusCode() == HttpStatus.OK) {
-//            JSONObject responseBody = response.getBody();
-//            return (String) responseBody.get("access_token");
-//        } else {
-//            throw new RuntimeException("Failed to get access token from Naver");
-//        }
-
-        // 추가
         ResponseEntity<Map> response = restTemplate.exchange(tokenUri, HttpMethod.POST, request, Map.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -89,21 +68,9 @@ public class NaverOAuthService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
-//        headers.set("Authorization", "Bearer " + accessToken);
-//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         HttpEntity<String> request = new HttpEntity<>(headers);
 
-//        ResponseEntity<JSONObject> response = restTemplate.exchange(userInfoUri, HttpMethod.GET, request, JSONObject.class);
-//
-//        if (response.getStatusCode() == HttpStatus.OK) {
-//            JSONObject responseBody = response.getBody();
-//            return (Map<String, Object>) responseBody.get("response");
-//        } else {
-//            throw new RuntimeException("Failed to get user info from Naver");
-//        }
-
-        // 추가
         ResponseEntity<Map> response = restTemplate.exchange(userInfoUri, HttpMethod.GET, request, Map.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
