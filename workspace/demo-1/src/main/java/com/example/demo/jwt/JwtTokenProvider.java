@@ -101,14 +101,17 @@ public class JwtTokenProvider {
             return true;    // 성공 시 -> 유효한 토큰임 -> true 반환
         } catch (SecurityException | MalformedJwtException e) {   // 잘못된 형식인 경우
             log.info("Invalid JWT Token", e);
+            throw new IllegalArgumentException("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {   // 토큰이 만료된 경우
             log.info("Expired JWT Token", e);
+            throw e;
         } catch (UnsupportedJwtException e) {    // 지원되지 않는 토큰인 경우
             log.info("Unsupported JWT Token", e);
+            throw new IllegalArgumentException("Unsupported JWT Token", e);
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
+            throw e;  // 예외를 다시 던짐
         }
-        return false;
     }
 
     // TODO: 추가
