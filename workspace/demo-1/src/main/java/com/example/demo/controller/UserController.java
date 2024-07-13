@@ -55,12 +55,25 @@ public class UserController {
 	 request Data : 아이디, 비밀번호
 	 Response Data : 로그인 성공
 	 */
+//	@PostMapping("/login")
+//	public JwtToken login(@RequestBody LoginDTO loginDTO) {
+//		String userId = loginDTO.getUserId();
+//		String password = loginDTO.getPassword();
+//		JwtToken tokenInfo = userService.login(userId, password);
+//
+//		return tokenInfo;
+//	}
 	@PostMapping("/login")
-	public JwtToken login(@RequestBody LoginDTO loginDTO) {
+	public ResponseEntity<JwtToken> login(@RequestBody LoginDTO loginDTO) {
 		String userId = loginDTO.getUserId();
 		String password = loginDTO.getPassword();
 		JwtToken tokenInfo = userService.login(userId, password);
-		return tokenInfo;
+
+		// 리프레시 토큰을 Redis에 저장
+		redisService.storeRefreshToken(userId, tokenInfo.getRefreshToken());
+
+		// 클라이언트에는 액세스 토큰만 반환
+		return ResponseEntity.ok(new JwtToken(tokenInfo.getAccessToken(), null));
 	}
 
 
@@ -125,31 +138,45 @@ public class UserController {
 	 Response Data : 로그인 성공
 	 */
 	// Redis
-	@PostMapping("/refreshToken")
-	public ResponseEntity<?> refreshToken(@RequestBody JwtToken jwtToken) {
-//		// 클라이언트에서 전달된 Reresh Token을 받아옴
+//	@PostMapping("/refreshToken")
+//	public ResponseEntity<?> refreshToken(@RequestBody JwtToken jwtToken) {
+////		// 클라이언트에서 전달된 Reresh Token을 받아옴
+////		String refreshToken = jwtToken.getRefreshToken();
+////		// RedisService의 refreshAccessToken을 사용하여 새로운 Access Token 발급
+////		JwtToken newToken = redisService.refreshAccessToken(refreshToken);
+//		System.out.println("Received jwtToken: " + jwtToken);
+//		System.out.println("Received refreshToken: " + jwtToken.getRefreshToken());
+//
 //		String refreshToken = jwtToken.getRefreshToken();
-//		// RedisService의 refreshAccessToken을 사용하여 새로운 Access Token 발급
+//		if (refreshToken == null) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Refresh token is missing");
+//		}
+//
+//		System.out.println("액세스 토큰 갱신 요청");
+//		System.out.println("Received jwtToken: " + jwtToken);
+//		System.out.println("Received refreshToken: " + jwtToken.getRefreshToken());
+//
 //		JwtToken newToken = redisService.refreshAccessToken(refreshToken);
+//
+//		// RedisService에서 반환된 결과를 반환 = 새로운 Access Token 발급하여 반환
+//		if (newToken != null) {
+//			return ResponseEntity.ok(newToken);
+//		} else {
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 Refresh Token");
+//		}
+//
+//	}
 
-		String refreshToken = jwtToken.getRefreshToken();
-		if (refreshToken == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Refresh token is missing");
+
+	@PostMapping("/refreshToken")
+	public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+		String accessToken = request.get("accessToken");
+		if (accessToken == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Access token is missing");
 		}
-		
-		System.out.println("액세스 토큰 갱신 요청");
-		System.out.println("Received jwtToken: " + jwtToken);
-		System.out.println("Received refreshToken: " + jwtToken.getRefreshToken());
 
-		JwtToken newToken = redisService.refreshAccessToken(jwtToken.getRefreshToken());
-
-		// RedisService에서 반환된 결과를 반환 = 새로운 Access Token 발급하여 반환
-		if (newToken != null) {
-			return ResponseEntity.ok(newToken);
-		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 Refresh Token");
-		}
-
+		JwtToken newToken = redisService.refreshAccessToken(accessToken);
+		return ResponseEntity.ok(newToken);
 	}
 
 
