@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LoginDTO;
 import com.example.demo.jwt.JwtToken;
+import com.example.demo.jwt.JwtTokenProvider;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.KakaoOAuthService;
 import com.example.demo.service.NaverOAuthService;
@@ -33,6 +34,7 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final KakaoOAuthService kakaoOAuthService;
 	private final NaverOAuthService naverOAuthService;
+	private final JwtTokenProvider jwtTokenProvider;
 
 //	@Autowired
 //	UserService userService;
@@ -138,36 +140,6 @@ public class UserController {
 	 Response Data : 로그인 성공
 	 */
 	// Redis
-//	@PostMapping("/refreshToken")
-//	public ResponseEntity<?> refreshToken(@RequestBody JwtToken jwtToken) {
-////		// 클라이언트에서 전달된 Reresh Token을 받아옴
-////		String refreshToken = jwtToken.getRefreshToken();
-////		// RedisService의 refreshAccessToken을 사용하여 새로운 Access Token 발급
-////		JwtToken newToken = redisService.refreshAccessToken(refreshToken);
-//		System.out.println("Received jwtToken: " + jwtToken);
-//		System.out.println("Received refreshToken: " + jwtToken.getRefreshToken());
-//
-//		String refreshToken = jwtToken.getRefreshToken();
-//		if (refreshToken == null) {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Refresh token is missing");
-//		}
-//
-//		System.out.println("액세스 토큰 갱신 요청");
-//		System.out.println("Received jwtToken: " + jwtToken);
-//		System.out.println("Received refreshToken: " + jwtToken.getRefreshToken());
-//
-//		JwtToken newToken = redisService.refreshAccessToken(refreshToken);
-//
-//		// RedisService에서 반환된 결과를 반환 = 새로운 Access Token 발급하여 반환
-//		if (newToken != null) {
-//			return ResponseEntity.ok(newToken);
-//		} else {
-//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 Refresh Token");
-//		}
-//
-//	}
-
-
 	@PostMapping("/refreshToken")
 	public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
 		String accessToken = request.get("accessToken");
@@ -178,6 +150,20 @@ public class UserController {
 		JwtToken newToken = redisService.refreshAccessToken(accessToken);
 		return ResponseEntity.ok(newToken);
 	}
+
+	// @RequestHeader 헤더에서 액세스토큰 추출
+//	@PostMapping("/refreshToken")
+//	public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String authorizationHeader) {
+//		// Authorization 헤더에서 "Bearer " 부분을 제거하고 토큰만 추출
+//		String accessToken = authorizationHeader.replace("Bearer ", "");
+//
+//		if (accessToken == null || accessToken.isEmpty()) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Access token is missing");
+//		}
+//
+//		JwtToken newToken = redisService.refreshAccessToken(accessToken);
+//		return ResponseEntity.ok(newToken);
+//	}
 
 
 	@PostMapping("/test")
@@ -191,12 +177,30 @@ public class UserController {
 	 request Data :
 	 Response Data : 로그아웃
 	 */
+//	@PostMapping("/logout")
+//	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader) {
+//		return userService.logout(authorizationHeader);
+//	}
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader) {
+		// Authorization 헤더에서 "Bearer " 부분을 제거하고 토큰만 추출
+		String accessToken = authorizationHeader.replace("Bearer ", "");
 
-	@GetMapping("/logout")
-	public Object logout() {
-		return null;
+		// accessToken이 비어있으면 에러 응답 반환
+		if (accessToken == null || accessToken.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Access token is missing");
+		}
+
+		// 토큰에서 사용자 ID 추출
+		String userId = jwtTokenProvider.getUserIdFromToken(accessToken);
+		if (userId != null) {
+			redisService.deleteRefreshToken(userId);  // Redis에서 사용자 ID로 저장된 리프레시 토큰 삭제
+			redisService.blacklistAccessToken(accessToken);  // Access Token을 블랙리스트에 추가
+			return ResponseEntity.ok("로그아웃 성공!");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+		}
 	}
-
 
 
 }

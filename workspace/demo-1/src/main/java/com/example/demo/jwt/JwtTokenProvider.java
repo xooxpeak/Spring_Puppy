@@ -151,6 +151,17 @@ public class JwtTokenProvider {
 //    }
 
 
+    // 토큰에서 사용자 ID를 추출하는 메서드
+    public String getUserIdFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.getSubject();
+    }
+
+    // 토큰의 만료 시간 추출
+    public long getExpiration(String token) {
+        Claims claims = parseClaims(token);
+        return claims.getExpiration().getTime() - System.currentTimeMillis();
+    }
 
 
     // accessToken

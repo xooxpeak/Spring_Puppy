@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.concurrent.TimeUnit;
+
 
 @Service
 @RequiredArgsConstructor
@@ -25,14 +27,6 @@ public class RedisService {
     @Autowired
     private final StringRedisTemplate stringRedisTemplate;
 
-
-//    private JwtTokenProvider jwtTokenProvider;
-//
-//    private UserService userService;
-//
-//    private RedisRepository redisRepository;
-//
-//    private StringRedisTemplate stringRedisTemplate;
 
     /**
      기능 : Redis에서 저장된 리프레시 토큰을 검증하고 새로운 액세스 토큰을 생성
@@ -76,8 +70,9 @@ public class RedisService {
 //
 //    }
 
+    // 리프레시 토큰을 Redis에 저장
     public void storeRefreshToken(String userId, String refreshToken) {
-        stringRedisTemplate.opsForValue().set(userId, refreshToken);
+        stringRedisTemplate.opsForValue().set(userId, refreshToken);  // 사용자 ID를 키로 하여 리프레시 토큰 저장
     }
 
     public JwtToken refreshAccessToken(String accessToken) {
@@ -99,6 +94,19 @@ public class RedisService {
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
         }
+    }
+
+    // 로그아웃 시, 리프레시 토큰 삭제
+    public void deleteRefreshToken(String userId) {
+        stringRedisTemplate.delete(userId);   // 사용자 ID를 키로 하여 리프레시 토큰 삭제
+    }
+
+    // Access 토큰을 블랙리스트에 추가
+    public void blacklistAccessToken(String accessToken) {
+        long expiration = jwtTokenProvider.getExpiration(accessToken);  // Access Token의 만료 시간 추출
+        // Access Token을 키로 하고 "logout"을 값으로 하여 Redis에 저장
+        // 만료 시간 동안만 유효
+        stringRedisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
     }
 
 

@@ -8,7 +8,6 @@ import com.example.demo.entity.UserRole;
 import com.example.demo.jwt.JwtToken;
 import com.example.demo.jwt.JwtTokenProvider;
 import com.example.demo.mapper.UserMapper;
-import com.example.demo.repository.RedisRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,15 +44,14 @@ public class UserService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private RedisRepository redisRepository;
-
-	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private HttpServletResponse response;
+
+
 
 	/**
 	 *
@@ -349,5 +347,6 @@ public class UserService {
 	private Authentication createAuthentication(UserDetails userDetails) {
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
+
 
 }
