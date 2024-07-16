@@ -8,6 +8,7 @@ import com.example.demo.service.KakaoOAuthService;
 import com.example.demo.service.NaverOAuthService;
 import com.example.demo.service.RedisService;
 import com.example.demo.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -183,24 +184,25 @@ public class UserController {
 //	}
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader) {
-		// Authorization 헤더에서 "Bearer " 부분을 제거하고 토큰만 추출
 		String accessToken = authorizationHeader.replace("Bearer ", "");
-
-		// accessToken이 비어있으면 에러 응답 반환
 		if (accessToken == null || accessToken.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Access token is missing");
 		}
 
-		// 토큰에서 사용자 ID 추출
-		String userId = jwtTokenProvider.getUserIdFromToken(accessToken);
-		if (userId != null) {
-			redisService.deleteRefreshToken(userId);  // Redis에서 사용자 ID로 저장된 리프레시 토큰 삭제
-			redisService.blacklistAccessToken(accessToken);  // Access Token을 블랙리스트에 추가
-			return ResponseEntity.ok("로그아웃 성공!");
-		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+		try {
+			if (jwtTokenProvider.validateToken(accessToken)) {
+				String userId = jwtTokenProvider.getUserIdFromToken(accessToken);
+				redisService.deleteRefreshToken(userId);
+				redisService.blacklistAccessToken(accessToken);
+				return ResponseEntity.ok("로그아웃 성공!");
+			}
+		} catch (ExpiredJwtException e) {
+			String userId = e.getClaims().getSubject();
+			redisService.deleteRefreshToken(userId);
+			redisService.blacklistAccessToken(accessToken);
+			return ResponseEntity.ok("로그아웃 성공! (만료된 토큰)");
 		}
+
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
 	}
-
-
 }

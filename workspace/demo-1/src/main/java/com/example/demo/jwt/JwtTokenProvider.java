@@ -163,6 +163,19 @@ public class JwtTokenProvider {
         return claims.getExpiration().getTime() - System.currentTimeMillis();
     }
 
+    public String getUserIdFromExpiredToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject();
+        }
+    }
+
 
     // accessToken
     private Claims parseClaims(String accessToken) {
