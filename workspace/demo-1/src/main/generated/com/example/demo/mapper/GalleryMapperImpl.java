@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-05-09T10:20:16+0900",
+    date = "2024-07-19T22:54:32+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -28,5 +28,22 @@ public class GalleryMapperImpl implements GalleryMapper {
         galleryDTO.gallExtension( galleryEntity.getGallExtension() );
 
         return galleryDTO.build();
+    }
+
+    @Override
+    public GalleryEntity galleryToEntity(GalleryDTO galleryDTO) {
+        if ( galleryDTO == null ) {
+            return null;
+        }
+
+        GalleryEntity.GalleryEntityBuilder galleryEntity = GalleryEntity.builder();
+
+        galleryEntity.id( galleryDTO.getId() );
+        galleryEntity.noteId( galleryDTO.getNoteId() );
+        galleryEntity.gallDate( galleryDTO.getGallDate() );
+        galleryEntity.gallImg( galleryDTO.getGallImg() );
+        galleryEntity.gallExtension( galleryDTO.getGallExtension() );
+
+        return galleryEntity.build();
     }
 }

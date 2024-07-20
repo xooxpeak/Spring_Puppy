@@ -23,6 +23,7 @@ public class GalleryDTO {
 	
 	@JsonProperty("gall_img")
 	private String gallImg;
+//	private List<String> gallImg;
 	
 	@JsonProperty("gall_extension")
 	private String gallExtension;

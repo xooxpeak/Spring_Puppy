@@ -11,7 +11,9 @@ public interface GalleryMapper {
     GalleryMapper instance = Mappers.getMapper(GalleryMapper.class);
 
     // GalleryEntity를 GalleryDTO로 맵핑
+//    @Mapping(source = "gallImg", target = "gallImg")
     GalleryDTO galleryToDTO(GalleryEntity galleryEntity);
+    GalleryEntity galleryToEntity(GalleryDTO galleryDTO);
 
 
 }
