@@ -15,16 +15,12 @@ public class GalleryDTO {
 
 	private Long id;
 	
-	@JsonProperty("note_id")
-	private Long noteId;
-	
 	@JsonProperty("gall_date")
 	private Date gallDate;
 	
 	@JsonProperty("gall_img")
 	private String gallImg;
-//	private List<String> gallImg;
-	
+
 	@JsonProperty("gall_extension")
 	private String gallExtension;
 

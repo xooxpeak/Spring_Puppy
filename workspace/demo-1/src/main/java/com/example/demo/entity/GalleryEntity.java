@@ -16,9 +16,6 @@ public class GalleryEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "note_id")
-	private Long noteId;
-	
 	@Column(name = "gall_date", nullable = false)
 	private Date gallDate;
 	
@@ -28,9 +25,10 @@ public class GalleryEntity {
 	@Column(name = "gall_extension")   // 확장자
 	private String gallExtension;
 
-	// NoteEntity와 다대일 관계
+
+	// PuppyEntity와 다대일 관계
 	@ManyToOne
-	@JoinColumn(name = "note_id", insertable = false, updatable = false)
-	private NoteEntity note;
+	@JoinColumn(name = "puppy_id", insertable = false, updatable = false)
+	private PuppyEntity puppy;
 
 	}

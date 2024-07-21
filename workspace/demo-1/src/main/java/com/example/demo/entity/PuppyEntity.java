@@ -52,6 +52,11 @@ public class PuppyEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "note_id")
 	private List<NoteEntity> noteEntityList;
+
+	// GalleryEntity와 일대다 관계
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "gallery_id")
+	private List<GalleryEntity> galleryEntityList;
 	
 	// StoreEntity와 다대일 관계
 	@ManyToOne

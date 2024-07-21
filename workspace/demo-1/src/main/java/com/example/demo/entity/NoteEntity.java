@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "note")
@@ -46,14 +45,9 @@ public class NoteEntity {
 	@JoinColumn(name = "puppy_id", insertable = false, updatable = false)
 	private PuppyEntity puppy;
 	
-	// GalleryEntity와 일대다 관계
-	@OneToMany(cascade = CascadeType.ALL)   //CascadeType.All => 부모가 받는 속성을 자식도 그대로 물려받음
-	@JoinColumn(name = "gallery_id")
-	private List<GalleryEntity> galleryEntityList;
-	
 	// StoreEntity와 다대일 관계
 	@ManyToOne
 	@JoinColumn(name = "store_id", insertable = false, updatable = false)
-	private StoreEntity entity;
+	private StoreEntity store;
 
 }

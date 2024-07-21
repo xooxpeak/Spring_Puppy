@@ -68,6 +68,11 @@ public class UserEntity implements UserDetails {
 	@JoinColumn(name = "likeList_id")
 	private List<LikeListEntity> likeListEntityList;
 
+	// GalleryEntity 일대다 관계 추가 & 조인
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "gallery_id")
+//	private List<GalleryEntity> galleryEntityList;
+
 	// UserRole 일대다 관계
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
