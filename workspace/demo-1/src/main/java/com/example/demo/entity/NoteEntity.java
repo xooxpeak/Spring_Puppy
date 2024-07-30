@@ -1,5 +1,8 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class NoteEntity {
 
 	@Id
@@ -43,6 +47,7 @@ public class NoteEntity {
 	// PuppyEntity와 다대일 관계
 	@ManyToOne
 	@JoinColumn(name = "puppy_id", insertable = false, updatable = false)
+	@JsonBackReference
 	private PuppyEntity puppy;
 	
 	// StoreEntity와 다대일 관계

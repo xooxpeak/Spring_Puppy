@@ -1,6 +1,9 @@
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class PuppyEntity {
 	
 	@Id
@@ -48,14 +52,18 @@ public class PuppyEntity {
 	@Column(name = "profile_img")
 	private String profileImg;
 	
-	// NoteEntity와 일대다 관계
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "note_id")
+	// NoteEntity와 일대다 관계 & 양방향 관계
+	@OneToMany(mappedBy = "puppy")
+	@JsonManagedReference
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "note_id")
 	private List<NoteEntity> noteEntityList;
 
-	// GalleryEntity와 일대다 관계
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "gallery_id")
+	// GalleryEntity와 일대다 관계 & 양방향 관계
+	@OneToMany(mappedBy = "puppy")
+	@JsonManagedReference
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "gallery_id")
 	private List<GalleryEntity> galleryEntityList;
 	
 	// StoreEntity와 다대일 관계
