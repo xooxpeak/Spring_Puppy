@@ -38,7 +38,8 @@ React
 <br>
 
 # ERD
-![image](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/91ebbeea-552b-401a-bbd8-8f1adce4412d)
+![erd](https://github.com/user-attachments/assets/dcc665d1-b360-4064-bfe2-254c28d07e4a)
+
 
 <br>
 <br>
@@ -80,8 +81,8 @@ https://green-dosa-d72.notion.site/7ad192a5754941b6aa113854e86e9721?pvs=4
 - Spring Security와 JWT를 사용한 회원 관리 시스템 구현
     - 스프링의 인터셉터를 사용해 로그인이 필요한 접근 시 인터셉터가 JWT 토큰을 검증
     - 보안 기능 향상을 위해 Access Token과 Refresh Token 두 가지 토큰을 사용
-    - 비밀번호를 암호화하여 저장하기 위해 Spring Security의 BycryptEncoder 사
-- 사용자 편의성 증진을 위한 소셜 로그인 기능 구현
+    - 비밀번호를 암호화하여 저장하기 위해 Spring Security의 BycryptEncoder 사용
+- 사용자 편의성 증진을 위한 소셜 로링
 - CRUD 기능 구현
 
 <br>
@@ -95,23 +96,13 @@ https://green-dosa-d72.notion.site/7ad192a5754941b6aa113854e86e9721?pvs=4
 | 강아지 등록 | 강아지 조회 |
 | ![강아지 등록](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/8e782804-2f92-43a7-8541-4d9f72673e28) | ![강아지 조회](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/343ff31b-887a-41db-bc4e-c5351726a528) |
 | 알림장 작성 | 알림장 조회 |
-| ![알림장 작성](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/5f8bb31a-9110-4c14-8859-5902c83387d6) | ![알림장 조회](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/bd77ab09-e82d-4f24-ad40-815b04279fbf) |
+| ![알림장등록](https://github.com/user-attachments/assets/b3478cb1-9237-47d1-9723-aa8acaa40ae1) | ![알림장보기](https://github.com/user-attachments/assets/ef7a147e-c3b9-4b1a-a84c-365fa113b3fc) |
 | 사진첩 작성 | 사진첩 조회 |
 | ![사진첩 작성](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/5c28a242-ff3c-41ea-b222-0030d7d69723) | ![사진첩 상세보기](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/d99cd895-77f2-41a1-bc4b-2906c0dc9bf4) |
 | 게시글 작성 | 게시글 조회 |
 | ![게시글 작성](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/ff00b01c-93cc-4bd4-84f4-24c6343577f2) | ![게시글 조회](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/3e96d1d4-7e9d-450f-9443-5750610806a4) |
 | 댓글 | 좋아요 |
 | ![댓글](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/435cb0f8-8ae5-43aa-b664-af9a9dfcecaa) | ![좋아요](https://github.com/xooxpeak/Spring_Puppy/assets/136714432/f3453dc5-99dd-40d4-a846-0fdec4e510d3) |
-
-<br>
-<br>
-
-# 남은 구현들 (구현 예정)
-1. 마이페이지
-2. 친구 목록
-3. 소켓을 통한 1:1 채팅 기능
-4. redis를 사용해 Refresh Token 관리
-5. 배포
 <br>
 <br>
 
